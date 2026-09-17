@@ -1,19 +1,52 @@
 # Secrets 
 .env
+.env.*
+!.env.example
+
 *.key
 *.pem
+*.p12
+*.pfx
 
 # Backups
 Backups/*
+!Backups/.gitkeep
+
+*.bak 
+*.backup 
+*.dump
+*.sql.gz
 
 #Large files
 *.iso
 *.img
+*.qcow2
+*.vmdk
+*.vdi
+
+#Videos und Fotos
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.heic
 
 # Temporary files
 *.tmp
 *.log 
+*.temp 
+*.cache
 
-# OS files
+#Windows
 Thumbs.db
+Desktop.ini
+
+#MacOS
 .DS_Store
+
+#Editors
+.vscode/
+.idea/
