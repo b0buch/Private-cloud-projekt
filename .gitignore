@@ -1,0 +1,19 @@
+# Secrets 
+.env
+*.key
+*.pem
+
+# Backups
+Backups/*
+
+#Large files
+*.iso
+*.img
+
+# Temporary files
+*.tmp
+*.log 
+
+# OS files
+Thumbs.db
+.DS_Store
