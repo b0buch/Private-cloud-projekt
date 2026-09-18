@@ -1,0 +1,25 @@
+Datum: 28.09.2026
+
+Plan:
+	-Überprüfen, was aktuell auf der 4TB- und der 1TB-HDD gespeichert ist, bevor etwas formatiert wird.
+	-Snapshot der Ubuntu-VM in Proxmox erstellen.
+	-VM-Einstellungen optimieren: ISO aus dem CD/DVD-Laufwerk entfernen, CPU-Typ auf "host" setzen.
+	-QEMU Guest Agent in Proxmox aktivieren und in Ubuntu installieren.
+	-4TB-HDD in Proxmox als Speicher einrichten und der VM als Datendisk hinzufügen (ohne VM-Backup).
+	-Datendisk in Ubuntu formatieren und dauerhaft einbinden (/etc/fstab).
+	-1TB-HDD in Proxmox als Backup-Speicher einrichten.
+	-Docker und Docker Compose aus dem offiziellen Repository installieren und mit hello-world testen.
+	-Projektordner anlegen und docker-compose.yml für Nextcloud, MariaDB und Redis vorbereiten.
+	-Falls Zeit bleibt: Nextcloud starten und die Weboberfläche testen.
+	-Arbeitsjournal, Server.txt und Architektur.txt aktualisieren.
+
+Durchgeführt:
+
+	
+Probleme:
+
+
+Lösungen:
+
+
+Gelernt:

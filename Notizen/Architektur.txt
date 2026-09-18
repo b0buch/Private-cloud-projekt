@@ -1,0 +1,21 @@
+Server                                  1TB / externer HDD
+
+Proxmox                                         Backup
+
+Linux VM
+
+Docker 
+
+Nextcloud
+
+12TB/8TB HDD
+
+
+
+
+
+
+
+
+
+
