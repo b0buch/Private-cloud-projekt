@@ -28,3 +28,25 @@
 
 	-Der E-Mail-Server ist noch nicht konfiguriert. Ohne ihn können Benutzer
 	 ihr Passwort nicht selbst zurücksetzen.
+
+	-Der Internetanbieter InterXS verwendet Carrier-Grade-NAT. Der Anschluss
+	 hat keine eigene öffentliche IPv4-Adresse, deshalb ist ein Portforwarding
+	 über IPv4 nicht möglich. Es gibt eine feste IPv6-Adresse (/64).
+	 Mögliche Lösungen: WireGuard über IPv6 nutzen, eine öffentliche IPv4
+	 für 5 CHF pro Monat dazubestellen, oder einen Dienst wie Tailscale
+	 verwenden, der ohne Portforwarding funktioniert.
+
+	-Der Server braucht im Heimnetz eine feste IP-Adresse. Diese wird in der
+	 FRITZ!Box unter Heimnetz > Netzwerk zugewiesen.
+
+	-Zu prüfen: Welches Router-Modell steht zu Hause wirklich (7490 oder ein
+	 anderes Modell vom Anbieter) und welche FRITZ!OS-Version ist installiert.
+	 WireGuard braucht mindestens FRITZ!OS 7.50.
+
+	-Nach dem Projekt wird auf Tailscale gewechselt, damit keine monatlichen
+	 Kosten mehr entstehen. Tailscale funktioniert auch hinter Carrier-Grade-NAT,
+	 weil beide Geräte eine ausgehende Verbindung zu einem Koordinationsserver
+	 aufbauen und kein Portforwarding nötig ist.
+
+	-Vorteil dieser Lösung: Im Projekt wird das VPN selbst konfiguriert und
+	 verstanden, im Betrieb wird danach die günstigere Variante genutzt.

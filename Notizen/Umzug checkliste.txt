@@ -1,0 +1,170 @@
+Checkliste: Umzug des Servers nach Hause
+Projekt: Private Cloud (Ferienprojekt)
+Erstellt: 28.09.2026
+
+
+===========================================================
+TEIL A - VORBEREITUNG (ohne Server, zu Hause am Abend)
+===========================================================
+
+A1. Anschluss und Router kontrollieren
+	[ ] Welches Gerät haengt direkt an der Internetleitung?
+	    (eigene FRITZ!Box 7490 oder ein Geraet vom Anbieter)
+	[ ] Wenn zwei Router hintereinander: Double NAT vermeiden.
+	    Ein Geraet muss als Modem / Bridge arbeiten.
+	[ ] FRITZ!OS-Version notieren (System > Update)
+	    Notwendig fuer WireGuard: mindestens 7.50
+	[ ] Kontrollieren, ob der Menuepunkt
+	    Internet > Freigaben > VPN (WireGuard) vorhanden ist
+	[ ] Unter Internet > Online-Monitor die oeffentliche IP ansehen.
+	    Adresse aus 100.64.x.x bis 100.127.x.x bedeutet CGNAT.
+
+A2. Oeffentliche IPv4-Adresse bestellen
+	[ ] Bei InterXS die zusaetzliche statische IPv4-Adresse bestellen
+	    (5 CHF pro Monat)
+	[ ] Fragen: Ist die Option monatlich kuendbar?
+	[ ] Fragen: Wie lange dauert die Aktivierung?
+	[ ] Fragen: Aendert sich dadurch die Telefonie im Haushalt?
+	[ ] Datum der Bestellung notieren: ______________
+
+A3. Netzwerk vorbereiten
+	[ ] DynDNS oder MyFRITZ einrichten
+	    (Internet > Freigaben > DynDNS bzw. MyFRITZ!-Konto)
+	[ ] Name notieren: ______________________________
+	[ ] Feste IP-Adresse fuer den Server festlegen
+	    Geplant: 192.168.178.____
+	[ ] Aktuellen Adressbereich der FRITZ!Box notieren:
+	    ________________________________________
+
+A4. Smartphones vorbereiten (alle drei Geraete)
+	[ ] Nextcloud-App installieren
+	[ ] WireGuard-App installieren
+	[ ] Akku-Optimierung fuer die Nextcloud-App ausschalten
+	    Xiaomi: zusaetzlich Autostart erlauben (MIUI-Einstellungen)
+	[ ] Freien Speicherplatz auf den Geraeten pruefen
+
+A5. Benutzerkonzept festlegen (auf Papier)
+	[ ] Wer bekommt ein Konto? (3 Benutzer)
+	    1: ____________________________
+	    2: ____________________________
+	    3: ____________________________
+	[ ] Gibt es einen gemeinsamen Ordner fuer alle?
+	[ ] Welche Speicherbegrenzung (Quota) pro Benutzer?
+	[ ] Wer darf Dateien mit anderen teilen?
+
+
+===========================================================
+TEIL B - AUFBAU ZU HAUSE (mit Server)
+===========================================================
+
+B1. Hardware anschliessen
+	[ ] Server aufstellen (Belueftung beachten, nicht im Schrank)
+	[ ] Netzwerkkabel zur FRITZ!Box anschliessen
+	[ ] Server einschalten und im Netzwerk suchen
+
+B2. Netzwerk von Proxmox anpassen
+	WICHTIG: Die aktuelle Konfiguration ist fuer die Internetfreigabe
+	des Laptops eingerichtet (192.168.137.x). Zu Hause gilt ein
+	anderer Adressbereich (192.168.178.x).
+	[ ] /etc/network/interfaces auf dem Proxmox-Host anpassen
+	[ ] Vorher eine Kopie der Datei erstellen:
+	    cp /etc/network/interfaces /etc/network/interfaces.backup
+	[ ] Netzwerkdienst neu starten oder Server neu starten
+	[ ] Proxmox-Weboberflaeche vom PC aus oeffnen
+	[ ] Kontrollieren, ob die VM startet und Internet hat
+
+B3. Feste IP-Adressen vergeben
+	[ ] In der FRITZ!Box unter Heimnetz > Netzwerk den Server suchen
+	[ ] Option aktivieren: "Diesem Netzwerkgeraet immer die gleiche
+	    IPv4-Adresse zuweisen"
+	[ ] Dasselbe fuer die Ubuntu-VM
+	[ ] Adressen notieren:
+	    Proxmox: ______________
+	    Ubuntu-VM: ______________
+
+B4. Nextcloud auf die neuen Adressen umstellen
+	[ ] In den Ordner /srv/nextcloud wechseln
+	[ ] trusted_domains anpassen:
+	    docker compose exec -u www-data app php occ \
+	      config:system:set trusted_domains 1 --value=192.168.178.XX
+	[ ] overwrite.cli.url anpassen:
+	    docker compose exec -u www-data app php occ \
+	      config:system:set overwrite.cli.url \
+	      --value=http://192.168.178.XX:8080
+	[ ] In der Datei .env den Wert TRUSTED_DOMAINS anpassen
+	[ ] Container neu starten: docker compose up -d
+	[ ] Nextcloud im Browser oeffnen und Anmeldung testen
+
+B5. Selbstpruefungen kontrollieren
+	[ ] Administrationseinstellungen > Uebersicht oeffnen
+	[ ] Kontrollieren, ob die Fehler verschwunden sind, die
+	    vorher wegen der Internetfreigabe entstanden sind
+	    (WebDAV, .well-known, OCS, Schriftarten, Datenverzeichnis)
+	[ ] Verbleibende Warnungen im Journal notieren
+
+
+===========================================================
+TEIL C - VPN EINRICHTEN
+===========================================================
+
+C1. Voraussetzungen pruefen
+	[ ] Ist die oeffentliche IPv4-Adresse aktiv?
+	    Kontrolle: Internet > Online-Monitor, die Adresse darf
+	    nicht mehr aus dem Bereich 100.64.x.x stammen
+	[ ] Kontrolle von aussen: Die IP-Adresse mit dem Mobilfunknetz
+	    (ohne WLAN) anpingen oder eine Webseite wie
+	    "wie ist meine ip" vergleichen
+
+C2. WireGuard auf der FRITZ!Box einrichten
+	[ ] Internet > Freigaben > VPN (WireGuard) > Verbindung hinzufuegen
+	[ ] Typ: Einzelnes Geraet (fuer jedes Smartphone eine eigene
+	    Verbindung, nicht dieselbe mehrfach verwenden)
+	[ ] Name der Verbindung sprechend waehlen (z.B. Handy-Yurii)
+	[ ] QR-Code mit der WireGuard-App auf dem Handy scannen
+	[ ] Konfigurationsdatei sicher aufbewahren
+
+C3. VPN testen
+	[ ] Test 1: Verbindung im eigenen WLAN aufbauen
+	    (funktioniert meistens, sagt aber wenig aus)
+	[ ] Test 2: WLAN am Handy ausschalten und ueber das
+	    Mobilfunknetz verbinden - das ist der richtige Test
+	[ ] Ueber VPN die Nextcloud-Adresse im Browser oeffnen
+	[ ] Ueber VPN in der Nextcloud-App anmelden
+	[ ] Ein Foto hochladen und die Geschwindigkeit messen
+	[ ] Verbindung fuer alle drei Benutzer einrichten und testen
+
+C4. Sicherheit
+	[ ] Zwei-Faktor-Authentisierung in Nextcloud aktivieren
+	[ ] Kontrollieren, dass Nextcloud NICHT direkt aus dem Internet
+	    erreichbar ist (kein Portforwarding auf Port 8080)
+	[ ] Starke Passwoerter fuer alle drei Benutzer
+	[ ] Fail2ban oder die Brute-Force-Schutzfunktion von
+	    Nextcloud kontrollieren
+
+
+===========================================================
+TEIL D - NACH DEM PROJEKT
+===========================================================
+
+	[ ] Tailscale auf dem Server installieren und testen
+	[ ] Zugriff ueber Tailscale von aussen pruefen
+	[ ] Erst danach die statische IPv4-Adresse bei InterXS kuendigen
+	[ ] Vergleich der beiden Loesungen in der Dokumentation
+	    festhalten (Kosten, Aufwand, Sicherheit, Geschwindigkeit)
+
+
+===========================================================
+NOTIZEN
+===========================================================
+
+Aktuelle Werte (Stand Arbeitsplatz, 28.09.2026):
+	Ubuntu-VM: 192.168.137.33
+	Nextcloud: http://192.168.137.33:8080
+	Projektordner: /srv/nextcloud
+	Container: nextcloud-app, nextcloud-db, nextcloud-redis
+
+Neue Werte (zu Hause):
+	Proxmox: ______________________
+	Ubuntu-VM: ______________________
+	Nextcloud: ______________________
+	DynDNS-Name: ______________________
