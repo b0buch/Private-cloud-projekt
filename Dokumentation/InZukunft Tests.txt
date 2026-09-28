@@ -1,0 +1,16 @@
+	-Prüfen, ob die fehlgeschlagenen Selbstprüfungen von Nextcloud nach dem
+	 Umzug an die FRITZ!Box verschwinden.
+
+	-Prüfen, ob der Cronjob wirklich alle fünf Minuten läuft (Zeitpunkt der
+	 letzten Ausführung in den Administrationseinstellungen).
+
+	-Prüfen, ob die Container nach einem Neustart des Servers automatisch
+	 starten (restart: unless-stopped).
+
+	-Die Abfrage mit GROUP BY über oc_mimetypes wiederholen, nachdem Fotos
+	 und Videos hochgeladen wurden, und mit dem heutigen Ergebnis vergleichen.
+
+	-Die Tabelle oc_group_user erneut abfragen, nachdem der zweite und dritte
+	 Benutzer erstellt wurden.
+
+	-Den Upload einer grossen Videodatei testen (Zeit und maximale Grösse).

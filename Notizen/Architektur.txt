@@ -8,7 +8,7 @@ Docker
 
 Nextcloud
 
-12TB/8TB HDD
+4TB HDD
 
 
 

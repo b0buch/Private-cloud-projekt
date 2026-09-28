@@ -1,0 +1,30 @@
+	-Die VM erhält ihre IP-Adresse (192.168.137.33) aktuell über die
+	 Internetfreigabe des Laptops. Zu Hause an der FRITZ!Box wird sich
+	 der Adressbereich ändern (192.168.178.x). Alle Konfigurationen mit
+	 fester IP-Adresse (z.B. trusted_domains in Nextcloud) müssen dann
+	 angepasst werden.
+
+	-Der Server braucht zu Hause eine feste IP-Adresse. Mit DHCP könnte
+	 sich die Adresse ändern und der Zugriff auf die Cloud würde nicht
+	 mehr funktionieren.
+
+	-Die Datenmenge kann bis zu 4TB betragen, für Backups steht aber nur
+	 eine 1TB-Festplatte zur Verfügung. Es muss festgelegt werden, welche
+	 Daten gesichert werden (wichtige Fotos und ausgewählte Videos) und
+	 welche nicht.
+
+	-Die Selbstprüfungen von Nextcloud (WebDAV, .well-known, OCS,
+	 Schriftarten, JavaScript-Module, Datenverzeichnis) schlagen fehl, weil
+	 der Webserver sich über die Internetfreigabe des Laptops nicht selbst
+	 erreichen kann. Nach dem Umzug nach Hause muss geprüft werden, ob die
+	 Meldungen verschwinden.
+
+	-Der Zugriff läuft aktuell nur über HTTP. Ohne HTTPS funktionieren
+	 einige Funktionen von Nextcloud nicht ("copy to clipboard",
+	 "service workers").
+
+	-Die Zwei-Faktor-Authentisierung ist noch nicht aktiviert. Sie wird
+	 wichtig, sobald die Cloud von aussen erreichbar ist.
+
+	-Der E-Mail-Server ist noch nicht konfiguriert. Ohne ihn können Benutzer
+	 ihr Passwort nicht selbst zurücksetzen.

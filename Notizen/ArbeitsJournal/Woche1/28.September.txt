@@ -1,25 +1,135 @@
 Datum: 28.09.2026
 
 Plan:
-	-Überprüfen, was aktuell auf der 4TB- und der 1TB-HDD gespeichert ist, bevor etwas formatiert wird.
 	-Snapshot der Ubuntu-VM in Proxmox erstellen.
-	-VM-Einstellungen optimieren: ISO aus dem CD/DVD-Laufwerk entfernen, CPU-Typ auf "host" setzen.
+	-VM-Einstellungen optimieren (ISO entfernen, CPU-Typ, Guest Agent).
 	-QEMU Guest Agent in Proxmox aktivieren und in Ubuntu installieren.
-	-4TB-HDD in Proxmox als Speicher einrichten und der VM als Datendisk hinzufügen (ohne VM-Backup).
-	-Datendisk in Ubuntu formatieren und dauerhaft einbinden (/etc/fstab).
-	-1TB-HDD in Proxmox als Backup-Speicher einrichten.
 	-Docker und Docker Compose aus dem offiziellen Repository installieren und mit hello-world testen.
 	-Projektordner anlegen und docker-compose.yml für Nextcloud, MariaDB und Redis vorbereiten.
+	-Nextcloud, MariaDB und Redis mit Docker Compose einrichten.
+	-Die Datenbank mit SQL untersuchen.
 	-Falls Zeit bleibt: Nextcloud starten und die Weboberfläche testen.
+	-Die Sicherheitswarnungen von Nextcloud kontrollieren.
 	-Arbeitsjournal, Server.txt und Architektur.txt aktualisieren.
 
 Durchgeführt:
-
+	-Server gestartet, Proxmox geöffnet und die Netzwerkverbindung geprüft.
+	-Das ISO-Abbild aus dem CD/DVD-Laufwerk der VM entfernt.
+	-Snapshot "vor-docker" in Proxmox erstellt.
+	-CPU-Typ der VM auf "host" gesetzt und den QEMU Guest Agent in Proxmox
+	 aktiviert sowie in Ubuntu installiert. Proxmox zeigt jetzt die
+	 IP-Adresse der VM an (192.168.137.33).
+	-Ubuntu mit apt aktualisiert.
+	-Das Logical Volume auf den ganzen freien Speicher erweitert (31GB auf 61GB).
+	-Docker Engine, Docker CLI, containerd und das Compose-Plugin aus dem
+	 offiziellen Docker-Repository installiert und mit "hello-world" getestet.
+	-Den Benutzer zur Gruppe docker hinzugefügt.
+	-Die Ordnerstruktur /srv/nextcloud mit den Unterordnern data, db und html
+	 angelegt.
+	-Eine docker-compose.yml mit drei Diensten erstellt: Nextcloud, MariaDB
+	 und Redis.
+	-Die Passwörter mit "openssl rand" erzeugt, in einer .env-Datei gespeichert
+	 und die Datei mit chmod 600 geschützt.
+	-Die Container gestartet und die Web-Installation von Nextcloud 35.0.1
+	 abgeschlossen.
+	-Die Datenbank mit dem MariaDB-Client untersucht: 138 Tabellen, Abfragen
+	 mit JOIN, GROUP BY und Aggregatfunktionen auf oc_users, oc_filecache,
+	 oc_storages, oc_mimetypes und oc_group_user.
+	-Die fehlenden Indizes, Spalten und Primärschlüssel in der Datenbank
+	 ergänzt (occ db:add-missing-indices, db:add-missing-columns,
+	 db:add-missing-primary-keys).
+	-Das Wartungsfenster auf 2 Uhr UTC und die Telefonregion auf CH gesetzt.
+	-Die Mimetype-Migration ausgeführt, solange die Datenbank noch klein ist.
+	-Die Hintergrundaufgaben von AJAX auf Cron umgestellt und einen
+	 Cronjob eingerichtet, der alle fünf Minuten läuft.
+	-Snapshot "nextcloud-laeuft" erstellt.
 	
 Probleme:
-
+	-Das Paket qemu-guest-agent konnte nicht installiert werden.
+	 Die Meldung war "Unable to locate package qemu-guest-agent".
+	-Die Ubuntu-VM hat nur 31GB genutzt, obwohl der virtuellen
+	 Maschine 64GB zugewiesen wurden. Über die Hälfte des Speichers
+	 war nicht verfügbar.
+	-Die Anmeldung an der Datenbank wurde zuerst abgelehnt
+	 ("Access denied for user 'nextcloud'").
+	-Mehrere Prüfungen von Nextcloud konnten nicht ausgeführt werden. Die
+	 Meldung war immer dieselbe: Der Webserver kann sich nicht selbst
+	 erreichen (WebDAV, .well-known, OCS, Schriftarten, JavaScript-Module,
+	 Datenverzeichnis).
+	-Im Log standen drei Warnungen.
+	-Nextcloud war über die IP-Adresse der VM zuerst nicht erreichbar,
+	 weil die Adresse nicht als vertrauenswürdige Domain eingetragen war.
 
 Lösungen:
+	-Die Paketquellen und der Netzwerkzugriff wurden kontrolliert und
+	 waren korrekt. Der Fehler lag an einem Tippfehler im Befehl.
+	 Nach der Korrektur liess sich das Paket normal installieren und
+	 der Dienst wurde mit systemctl aktiviert.
 
+	-Mit "vgs" und "lvs" wurde festgestellt, dass die Volume Group
+	 63GB gross ist, das Logical Volume aber nur 31GB. Mit dem Befehl
+	 "lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv" wurde das
+	 Logical Volume auf den ganzen freien Speicher erweitert und mit
+	 "resize2fs" das Dateisystem vergrössert. Danach standen 61GB
+	 zur Verfügung, ohne Neustart und ohne Datenverlust.
+
+	-Die Zeile TRUSTED_DOMAINS wurde in der .env-Datei ergänzt. Der Installer
+	 hat die Adresse zusätzlich selbst in die Konfiguration eingetragen.
+
+	-Es wurden drei verschiedene Passwörter verwechselt: das Passwort des
+	 Datenbankbenutzers, das Passwort von root in der Datenbank und das
+	 Passwort des Nextcloud-Administrators. Mit dem richtigen Wert aus der
+	 .env-Datei hat die Anmeldung funktioniert.
+
+	-Die fehlgeschlagenen Prüfungen haben alle dieselbe Ursache: Die VM
+	 erhält ihre Verbindung über die Internetfreigabe des Laptops, und der
+	 Container kann die eigene IP-Adresse des Hosts nicht erreichen. Zu Hause
+	 an der FRITZ!Box sollte das Problem nicht mehr auftreten. Es wurde für
+	 später notiert.
+
+	-Die zwei PHP-Warnungen (Undefined array key "secret" und "passwordsalt")
+	 stammen aus dem Moment der Installation: Nextcloud liest diese Werte aus
+	 der Konfiguration, bevor sie erzeugt wurden. Die dritte Warnung kommt von
+	 der App serverinfo und betrifft ein Update von Version 28 auf 29, das bei
+	 einer neuen Installation nicht relevant ist. Alle drei sind harmlos.
 
 Gelernt:
+	-Ich habe gelernt, dass man bei einer Fehlermeldung zuerst den
+	 eigenen Befehl kontrollieren sollte, bevor man die
+	 Systemkonfiguration untersucht.
+	-Ich habe gelernt, wie LVM funktioniert: Eine Volume Group enthält
+	 den ganzen Speicher, das Logical Volume ist nur ein Teil davon.
+	 Der Ubuntu-Installer nutzt standardmässig nur die Hälfte.
+	-Ich habe gelernt, wie man ein Logical Volume und ein Dateisystem
+	 im laufenden Betrieb vergrössert (lvextend und resize2fs).
+	-Ich habe gelernt, wozu der QEMU Guest Agent dient: Proxmox sieht
+	 damit die IP-Adresse der VM und kann sie sauber herunterfahren.
+	-Ich habe gelernt, was ein Snapshot ist und dass er kein Backup
+	 ersetzt, weil er auf derselben Festplatte liegt wie die VM.
+	-Ich habe gelernt, wie man ein externes Repository mit GPG-Schlüssel
+	 einbindet und warum Pakete signiert werden.
+	-Ich habe gelernt, wie Nextcloud seine Daten organisiert: Die Dateien
+	 liegen auf der Festplatte, die Datenbank enthält nur den Index.
+	-Ich habe gelernt, dass die Tabelle oc_filecache einen Fremdschlüssel auf
+	 sich selbst hat (Spalte parent), weil damit die Ordnerstruktur als Baum
+	 abgebildet wird.
+	-Ich habe gelernt, dass oc_group_user eine Verknüpfungstabelle für eine
+	 n:m-Beziehung ist und einen zusammengesetzten Primärschlüssel hat.
+	-Ich habe gelernt, dass Passwörter als Hash und nicht im Klartext
+	 gespeichert werden.
+	-Ich habe gelernt, warum Indizes wichtig sind: Sie brauchen Speicherplatz
+	 und machen das Schreiben langsamer, dafür wird das Lesen viel schneller.
+	-Ich habe gelernt, dass Nextcloud Hintergrundaufgaben mit AJAX oder Cron
+	 ausführen kann und dass Cron für einen Server die bessere Lösung ist.
+	-Ich habe gelernt, dass man aufwändige Migrationen besser ausführt,
+	 solange die Datenbank noch klein ist.
+
+Notizen:
+Filesystem                         Size  Used Avail Use% Mounted on
+/dev/mapper/ubuntu--vg-ubuntu--lv   61G  7.5G   51G  13% /
+
+               total        used        free      shared  buff/cache   available
+Mem:           7.3Gi       565Mi       5.6Gi       4.9Mi       1.4Gi       6.7Gi
+Swap:          3.8Gi          0B       3.8Gi
+
+
