@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mariadb:lts
+    container_name: nextcloud-db
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=nextcloud
+      - MARIADB_USER=nextcloud
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+
+  redis:
+    image: redis:alpine
+    container_name: nextcloud-redis
+    restart: unless-stopped
+
+  app:
+    image: nextcloud:apache
+    container_name: nextcloud-app
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/var/www/html
+      # Datenverzeichnis auf der grossen Festplatte.
+      # Beim Wechsel auf eine andere Festplatte nur diese Zeile anpassen.
+      - /mnt/clouddata:/var/www/html/data
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - NEXTCLOUD_TRUSTED_DOMAINS=${TRUSTED_DOMAINS}
