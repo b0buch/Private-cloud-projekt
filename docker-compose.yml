@@ -18,18 +18,15 @@ services:
     restart: unless-stopped
 
   app:
-    image: nextcloud:apache
+    build: ./nextcloud-image
+    image: nextcloud-ffmpeg:latest
     container_name: nextcloud-app
     restart: unless-stopped
     depends_on:
       - db
       - redis
-    ports:
-      - "8080:80"
     volumes:
       - ./html:/var/www/html
-      # Datenverzeichnis auf der grossen Festplatte.
-      # Beim Wechsel auf eine andere Festplatte nur diese Zeile anpassen.
       - /mnt/clouddata:/var/www/html/data
     environment:
       - MYSQL_HOST=db
@@ -38,3 +35,20 @@ services:
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - REDIS_HOST=redis
       - NEXTCLOUD_TRUSTED_DOMAINS=${TRUSTED_DOMAINS}
+      - PHP_MEMORY_LIMIT=1G
+      - PHP_UPLOAD_LIMIT=16G
+      
+  caddy:
+    image: caddy:alpine
+    container_name: nextcloud-caddy
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+      - ./caddy/certs:/certs:ro

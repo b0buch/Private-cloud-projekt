@@ -1,0 +1,9 @@
+FROM nextcloud:apache
+
+# apt auf IPv4 festlegen, weil die Internetfreigabe kein IPv6 weiterleitet
+RUN echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
+
+# ffmpeg fuer die Vorschaubilder von Videos
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ffmpeg \
+ && rm -rf /var/lib/apt/lists/*

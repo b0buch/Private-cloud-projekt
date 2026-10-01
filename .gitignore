@@ -4,6 +4,7 @@
 !.env.example
 
 *.key
+*.crt
 *.pem
 *.p12
 *.pfx
@@ -50,3 +51,7 @@ Desktop.ini
 #Editors
 .vscode/
 .idea/
+
+#Screenshots 
+!docs/bilder/*.png
+!docs/bilder/*.jpg

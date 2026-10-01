@@ -32,7 +32,7 @@ normalen SELECT-Abfragen auslesen.
 |        ---         |       ---              ---              ---       |
 | `oc_users`         | Benutzerkonten                                    |
 | `oc_groups`        | Gruppen                                           |
-| `oc_group_user`    | Verknüpfung Benutzer ↔ Gruppe (c:m)               |
+| `oc_group_user`    | Verknüpfung Benutzer ↔ Gruppe (n:m)               |
 | `oc_preferences`   | Einstellungen je Benutzer, zum Beispiel die Quota |
 | `oc_filecache`     | Index aller Dateien und Ordner                    |
 | `oc_storages`      | Speicherorte                                      |

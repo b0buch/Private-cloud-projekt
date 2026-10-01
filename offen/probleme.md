@@ -32,6 +32,7 @@ anfaellig. Sie bietet kein IPv6 und die Konfiguration geht bei einem
 Neustart des Laptops leicht verloren. Nach dem Umzug an die FRITZ!Box
 sollten diese Probleme wegfallen.
 
+
 ## Nextcloud
 
 **Mehrere Selbstprüfungen schlagen fehl** (WebDAV, `.well-known`, OCS,
@@ -39,21 +40,16 @@ Schriftarten, JavaScript-Module, Datenverzeichnis), weil der Webserver sich übe
 die Internetfreigabe des Laptops nicht selbst erreichen kann. Nach dem Umzug nach
 Hause muss geprüft werden, ob die Meldungen verschwinden.
 
-**Der Zugriff läuft aktuell nur über HTTP.** Ohne HTTPS funktionieren einige
-Funktionen von Nextcloud nicht ("copy to clipboard", "service workers").
-
-**Die Zwei-Faktor-Authentisierung ist noch nicht aktiviert.** Sie wird wichtig,
-sobald die Cloud von aussen erreichbar ist.
-
 **Der E-Mail-Server ist noch nicht konfiguriert.** Ohne ihn können Benutzer ihr
 Passwort nicht selbst zurücksetzen.
 
-**Die maximale Grösse für den Upload ist noch nicht angepasst.** Die
-Standardwerte von PHP reichen für grosse GoPro-Videos wahrscheinlich nicht.
+**Benutzerkonten und Gruppen werden neu angelegt.** Die endgültigen Konten,
+Gruppen und gemeinsamen Ordner werden in einem Durchgang erstellt, sobald das
+Konzept feststeht. Das Administratorkonto bleibt bis dahin unverändert.
 
-ffmpeg wurde direkt im laufenden Container installiert. Bei einem Update
-des Images geht diese Installation verloren. Eine dauerhafte Loesung waere
-ein eigenes Dockerfile auf Basis von nextcloud:apache.
+**Trennung von Administration und täglicher Nutzung fehlt.** Geplant ist ein
+eigenes Konto für die Administration, das tägliche Konto ohne
+Administratorrechte.
 
 ## Speicher und Backup
 
@@ -64,15 +60,6 @@ werden (wichtige Fotos und ausgewählte Videos) und welche nicht.
 **Die Daten liegen aktuell auf der externen 1TB-Festplatte.** Sie muss später auf
 die 4TB-Festplatte verschoben werden, dann geht die externe Festplatte ins
 Backup.
-
-**Ein Backup der Datenbank fehlt noch.** Das Backup der VM mit vzdump enthält die
-Daten auf der externen Festplatte nicht, weil sie als USB-Gerät durchgereicht
-wird. Für Daten und Datenbank ist ein eigenes Backup mit `mysqldump` nötig.
-
-Die Sicherungen der Datenbank liegen aktuell auf derselben SSD wie die
-Datenbank selbst. Das ist nur eine Zwischenloesung zum Testen des
-Ablaufs. Sobald die zusaetzliche 128GB-SSD eingebaut ist, wird der
-Zielordner dorthin verlegt.
 
 ## Proxmox
 
@@ -103,4 +90,14 @@ DynDNS-Namen verwendet**, sondern Platzhalter.
 Akku-Optimierung.** Diese kann den automatischen Upload von Fotos im Hintergrund
 stoppen. Für die Nextcloud-App muss die Akku-Optimierung deaktiviert werden, bei
 Xiaomi zusätzlich der Autostart erlaubt werden.
+
+## Gelöst
+
+|                    Problem                       |                   Gelöst am                      |
+|                      ---                         |                      ---                         |
+| Zugriff nur über HTTP, kein HTTPS                | 30.09.2026                                       |
+| Maximale Uploadgrösse zu klein für grosse Videos | 30.09.2026                                       |
+| ffmpeg nur im laufenden Container installiert    | 01.10.2026, eigenes Dockerfile                   |
+| Zwei-Faktor-Authentisierung nicht aktiviert      | 01.10.2026                                       |
+| Backup der Datenbank fehlte                      | 29.09.2026, mysqldump mit Wiederherstellungstest |
 

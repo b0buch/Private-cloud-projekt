@@ -28,31 +28,43 @@ jeder mit einem eigenen Konto und eigenem Speicherbereich.
 
 ## Aufbau des Repositories
 
-|       Ordner / Datei       |                      Inhalt                     |
-|      ---          ---      |    ---                ---                ---    |
-| `journal/`                 | Arbeitsjournal, eine Datei pro Arbeitstag       |
-| `docs/architektur.md`      | Aufbau des Systems und Rolle der Festplatten    |
-| `docs/server.md`           | Hardware und Anschluss                          |
-| `docs/umzug-checkliste.md` | Checkliste für den Umzug des Servers nach Hause |
-| `docs/datenbank.md`        | SQL-Abfragen und Erkenntnisse zur Datenbank     |
-| `offen/probleme.md`        | Offene Probleme und Punkte für später           |
-| `offen/loesungen.md`       | Lösungsideen für später                         |
-| `offen/tests.md`           | Geplante und erledigte Tests                    |
+|       Ordner / Datei         |                      Inhalt                     |
+|      ---          ---        |    ---                ---                ---    |
+| `journal/`                   | Arbeitsjournal, eine Datei pro Arbeitstag       |
+| `docs/architektur.md`        | Aufbau des Systems und Rolle der Festplatten    |
+| `docs/backup-konzept.md`     | Sicherungsstrategie und Begründung              |
+| `docs/datenbank.md`          | SQL-Abfragen und Erkenntnisse zur Datenbank     |
+| `docs/server.md`             | Hardware und Anschluss                          |
+| `docs/sicherheit.md`         | Sicherheitskonzept und verbleibende Risiken     |
+| `docs/umzug-checkliste.md`   | Checkliste für den Umzug des Servers nach Hause |
+| `offen/loesungen.md`         | Lösungsideen für später                         |
+| `offen/probleme.md`          | Offene Probleme und Punkte für später           |
+| `offen/tests.md`             | Geplante und erledigte Tests                    |
+| `docker-compose.yml`         | Definition der vier Container                   |
+| `nextcloud-image/Dockerfile` | Eigenes Image mit ffmpeg                        |
+| `caddy/Caddyfile.example`    | Konfiguration des Reverse Proxy                 |
+| `.env.example`               | Vorlage für die Passwortdatei                   |
+
 
 ## Stand des Projekts
 
 |                   Bereich                  |                    Stand                  |
 |    ---              ---             ---    |     ---             ---            ---    |
-| Proxmox und Ubuntu-VM                      |                   fertig                  |
-| Docker und Docker Compose                  |                   fertig                  |
-| Nextcloud, MariaDB, Redis                  |                   fertig                  |
+| Proxmox und Ubuntu-VM                      | fertig                                    |
+| Docker und Docker Compose                  | fertig                                    |
+| Nextcloud, MariaDB, Redis                  | fertig                                    |
 | Datenfestplatte und Verschiebung der Daten | fertig (Test mit externer 1TB-Festplatte) |
-| Backup der VM (vzdump)                     |                   fertig                  |
-| Benutzer und Gruppen                       |                   in Arbeit               |
-| Backup der Datenbank (mysqldump)           |                   offen                   |
-| HTTPS                                      |                   offen                   |
+| Backup der VM (vzdump)                     | fertig                                    |
+| Benutzer und Gruppen                       | in Arbeit                                 |
+| Backup der Datenbank (mysqldump)           | fertig                                    |
 | VPN (WireGuard)                            | offen, erst nach dem Umzug nach Hause     |
 | Zugriff mit dem Smartphone                 | offen, erst nach dem Umzug nach Hause     |
+| Eigenes Docker-Image mit ffmpeg            | fertig                                    |
+| Datenfestplatte mit LVM                    | fertig                                    |
+| HTTPS mit Reverse Proxy und Zertifikat     | fertig                                    |
+| Zwei-Faktor-Authentisierung                | fertig                                    |
+| Brute-Force-Schutz                         | geprüft                                   |
+| 4TB-Festplatte einbauen                    | wartet auf Lieferung                      |
 
 ---
 

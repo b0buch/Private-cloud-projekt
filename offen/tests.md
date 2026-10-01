@@ -23,16 +23,25 @@
       **Wiederherstellung** testen. Ein Backup, das nie zurückgespielt wurde,
       ist kein Backup.
 
-## Offen — kann am Arbeitsplatz gemacht werden
-
-- [ ] Testen, wie gross eine hochgeladene Videodatei maximal sein darf
-      (Einstellungen von PHP).
-- [ ] Prüfen, ob der Cronjob wirklich alle fünf Minuten läuft (Zeitpunkt der
-      letzten Ausführung in den Administrationseinstellungen).
-- [ ] Die Abfrage mit GROUP BY über `oc_mimetypes` wiederholen, nachdem Fotos
+- [x] Die Abfrage mit GROUP BY über `oc_mimetypes` wiederholen, nachdem Fotos
       und Videos hochgeladen wurden, und mit dem Ergebnis vom 29.09.2026
       vergleichen.
-- [ ] Prüfen, ob Vorschaubilder für Videos funktionieren (braucht ffmpeg).
+
+- [x] **Brute-Force-Schutz.** Getestet, funktioniert. Die richtige Adresse des
+      Clients wird erkannt, damit ist trusted_proxies bestaetigt. (01.10.2026)
+
+- [x] **Zwei-Faktor-Authentisierung.** Eingerichtet und getestet. (01.10.2026)
+
+- [x] **Maximale Uploadgrösse.** Limit auf 16 GB gesetzt, mit einer 6 GB grossen
+      Datei getestet: rund 1 Minute, etwa 100 MB/s. (30.09.2026)
+
+- [x] **Vorschaubilder für Videos.** Funktionieren mit ffmpeg im eigenen Image.
+      (30.09.2026, nach dem Neuaufbau bestätigt am 01.10.2026)
+
+## Offen — kann am Arbeitsplatz gemacht werden
+
+- [ ] Prüfen, ob der Cronjob wirklich alle fünf Minuten läuft (Zeitpunkt der
+      letzten Ausführung in den Administrationseinstellungen).
 
 ## Offen — erst nach dem Umzug nach Hause
 
@@ -45,6 +54,12 @@
 - [ ] Prüfen, dass Nextcloud **nicht** ohne VPN aus dem Internet erreichbar ist.
 - [ ] Den Upload eines grossen Videos über VPN testen (Zeit messen, der
       Anschluss hat 50 Mbit/s im Upload).
+
+# Tailscale zu Hause einrichten und mit WireGuard vergleichen
+    Tailscale wurde im Firmennetz nach Absprache mit dem Berufsbildner nicht
+    installiert. Der Test erfolgt zu Hause.
+    Die Zwei-Faktor-Authentisierung mit der Nextcloud-App auf dem Smartphone
+    testen (die App verwendet App-Passwoerter und umgeht 2FA).
 
 ## Abzuklären
 

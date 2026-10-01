@@ -22,7 +22,7 @@ Dokumentation lassen sich beide Varianten vergleichen.
 | Kosten                   |   5 CHF/Monat für die IPv4  |       gratis bis 100 Geräte       |
 | Funktioniert hinter CGNAT|            nein             |               ja                  |
 | Aufwand beim Einrichten  |            mittel           |               klein               |
-| Lerneffekt               |            hoch             |               gerin               |
+| Lerneffekt               |            hoch             |               gering              |
 | Abhängigkeit von Dritten |            keine            | Koordinationsserver von Tailscale |
 
 ## Mehrere Festplatten: LVM
@@ -78,6 +78,24 @@ Ein Skript, das per Cron läuft:
 Der Wartungsmodus ist nötig, damit Dateien und Datenbank zueinander passen.
 Ohne ihn könnte während des Dumps eine Datei hochgeladen werden, die dann in der
 Sicherung fehlt.
+
+## Ablauf beim Wechsel auf die 4TB-Festplatte
+
+Wichtig: Der Befehl "lvextend" darf erst **nach** dem Entfernen der alten
+Festplatte ausgefuehrt werden. Wird das Logical Volume vorher auf den ganzen
+Speicher erweitert, belegt es beide Festplatten und die alte laesst sich nicht
+mehr herausnehmen, ohne das Dateisystem zu verkleinern.
+
+Reihenfolge:
+
+1. pvcreate auf der neuen Festplatte
+2. vgextend: neue Festplatte zur Volume Group hinzufuegen
+3. pvmove: Daten von der alten auf die neue Festplatte verschieben
+   (im laufenden Betrieb, Nextcloud bleibt erreichbar)
+4. vgreduce und pvremove: alte Festplatte aus der Gruppe entfernen
+5. lvextend und resize2fs: erst jetzt das Volume auf den ganzen Speicher
+   erweitern
+6. Die freie 1TB-Festplatte neu formatieren und als Sicherungsziel einrichten
 
 
 ## Stromverbrauch senken (Idee fuer spaeter)

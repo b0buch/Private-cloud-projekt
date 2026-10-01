@@ -89,10 +89,13 @@ Erstellt: 28.09.2026
 cd /srv/nextcloud
 
 docker compose exec -u www-data app php occ \
-  config:system:set trusted_domains 0 --value=192.168.178.XX:8080
+  config:system:set trusted_domains 0 --value=192.168.178.XX
 
 docker compose exec -u www-data app php occ \
-  config:system:set overwrite.cli.url --value=http://192.168.178.XX:8080
+  config:system:set overwrite.cli.url --value=https://192.168.178.XX
+
+docker compose exec -u www-data app php occ \
+  config:system:set overwriteprotocol --value=https
 ```
 
 - [ ] Befehle ausführen
@@ -107,6 +110,16 @@ docker compose exec -u www-data app php occ \
       Internetfreigabe entstanden sind (WebDAV, `.well-known`, OCS,
       Schriftarten, Datenverzeichnis)
 - [ ] Verbleibende Warnungen im Journal notieren
+
+### B6. Zertifikat neu ausstellen
+
+> Das aktuelle Zertifikat gilt nur für die Adresse am Arbeitsplatz. Mit einer
+> neuen Adresse oder einem lokalen Namen meldet der Browser sonst einen Fehler.
+
+- [ ] Neues Zertifikat mit der neuen Adresse im Feld `subjectAltName` erstellen
+- [ ] Caddy neu starten: `docker compose restart caddy`
+- [ ] Das neue Zertifikat auf allen Geräten als vertrauenswürdig installieren
+- [ ] Prüfen, dass der Browser keine Warnung mehr anzeigt
 
 ---
 
@@ -141,9 +154,10 @@ docker compose exec -u www-data app php occ \
 
 ### C4. Sicherheit
 
-- [ ] Zwei-Faktor-Authentisierung in Nextcloud aktivieren
+- [ ] Zwei-Faktor-Authentisierung für die beiden neuen Benutzer einrichten
+      (für das eigene Konto am 01.10.2026 bereits erledigt)
 - [ ] Kontrollieren, dass Nextcloud **nicht** direkt aus dem Internet erreichbar
-      ist (keine Portweiterleitung auf Port 8080)
+      ist (keine Portweiterleitung auf Port 443)
 - [ ] Starke Passwörter für alle drei Benutzer
 - [ ] Brute-Force-Schutz von Nextcloud kontrollieren
 
@@ -163,12 +177,12 @@ docker compose exec -u www-data app php occ \
 
 **Aktuelle Werte (Arbeitsplatz):**
 
-|               |                                                    |
-|      ---      |        ---            ---             ---          |
-| Projektordner | `/srv/nextcloud`                                   |
-| Datenordner   | `/mnt/clouddata`                                   |
-| Container     | `nextcloud-app`, `nextcloud-db`, `nextcloud-redis` |
-| Port          |                      8080                          |
+|               |                                                                      |
+|      ---      |        ---            ---             ---                            |
+| Projektordner | `/srv/nextcloud`                                                     |
+| Datenordner   | `/mnt/clouddata`                                                     |
+| Container     |`nextcloud-caddy`, `nextcloud-app`, `nextcloud-db`, `nextcloud-redis` |
+| Port          |443 (HTTPS), 80 leitet weiter                                         |
 
 **Neue Werte (zu Hause):**
 
