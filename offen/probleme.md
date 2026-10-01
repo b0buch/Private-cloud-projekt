@@ -27,6 +27,11 @@ unter Heimnetz → Netzwerk zugewiesen. Mit reinem DHCP könnte sich die Adresse
 ein Gerät vom Anbieter) und welche FRITZ!OS-Version ist installiert? WireGuard
 braucht mindestens FRITZ!OS 7.50.
 
+Die Netzwerkverbindung ueber die Internetfreigabe des Laptops ist
+anfaellig. Sie bietet kein IPv6 und die Konfiguration geht bei einem
+Neustart des Laptops leicht verloren. Nach dem Umzug an die FRITZ!Box
+sollten diese Probleme wegfallen.
+
 ## Nextcloud
 
 **Mehrere Selbstprüfungen schlagen fehl** (WebDAV, `.well-known`, OCS,
@@ -45,6 +50,10 @@ Passwort nicht selbst zurücksetzen.
 
 **Die maximale Grösse für den Upload ist noch nicht angepasst.** Die
 Standardwerte von PHP reichen für grosse GoPro-Videos wahrscheinlich nicht.
+
+ffmpeg wurde direkt im laufenden Container installiert. Bei einem Update
+des Images geht diese Installation verloren. Eine dauerhafte Loesung waere
+ein eigenes Dockerfile auf Basis von nextcloud:apache.
 
 ## Speicher und Backup
 
