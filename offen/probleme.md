@@ -1,113 +1,120 @@
-# Offene Probleme
-
-Punkte, die noch offen sind oder erst nach dem Umzug nach Hause gelöst werden
-können.
-
+# Probleme
+ 
+Stand: 06.10.2026
+ 
+Offene Punkte oben, gelöste in der Tabelle am Ende.
+ 
 ## Netzwerk
-
-**Die Heimnetz-Subnetz 192.168.178.0/24 ist die Werkseinstellung der
-FRITZ!Box.** Dadurch kollidiert sie mit fremden Netzen: Ein Mobilfunk-Hotspot
-oder ein Gastnetz mit demselben Bereich macht die VPN-Verbindung unbrauchbar,
-weil zwei Routen auf dieselbe Subnetz zeigen. Geplant: Umstellung auf einen
-seltenen Bereich wie 10.17.23.0/24. Das erfordert neue Reservierungen, neue
-WireGuard-Verbindungen und Anpassung der Dokumentation.
-
-**VPN-Teilnehmer der FRITZ!Box erreichen das ganze Heimnetz.** Der Router
-kann den Zugriff einzelner Teilnehmer nicht einschraenken. Geplant: ein
-zweiter WireGuard-Server auf der VM, dessen Teilnehmer ueber Firewall-Regeln
-nur auf Nextcloud zugreifen koennen.
-
-**Geplante Aufgaben laufen nur im Betrieb.** Siehe server.md.
-
+ 
+**Das Heimnetz 192.168.178.0/24 ist die Werkseinstellung der FRITZ!Box.**
+Dadurch kann es mit fremden Netzen kollidieren: Ein Mobilfunk-Hotspot oder ein
+Gastnetz mit demselben Bereich macht das Router-VPN unbrauchbar, weil zwei
+Routen auf dasselbe Netz zeigen. Beim Server-VPN betrifft es nur die eine
+Adresse `192.168.178.220`, das Risiko ist kleiner, aber nicht null. Geplant:
+Umstellung auf einen seltenen Bereich wie `10.17.23.0/24`. Das erfordert neue
+Reservierungen, Anpassungen an beiden VPN, am Zertifikat und an der
+Dokumentation.
+ 
+**DNS der Benutzer hängt am Server.** Mit `DNS = 10.9.0.1` gehen bei aktivem
+Server-VPN alle Namensanfragen über dnsmasq. Ist der Server aus, öffnen sich
+auf dem Gerät auch andere Webseiten nicht, bis das VPN ausgeschaltet wird.
+Vorerst ein Hinweis in der Anleitung für die Benutzer. Dauerhafte Lösung wäre
+eine eigene Domain mit einem öffentlichen DNS-Eintrag (siehe
+`sicherheit.md`).
+ 
+**Alte Einträge in `trusted_domains`.** `192.168.137.220` und `192.168.137.*`
+stammen aus dem Netz des Arbeitsplatzes. Wirkungslos, aber die Konfiguration
+soll den tatsächlichen Zustand zeigen. Zu entfernen.
+ 
 ## Nextcloud
-
-**Mehrere Selbstprüfungen schlagen fehl** (WebDAV, `.well-known`, OCS,
-Schriftarten, JavaScript-Module, Datenverzeichnis), weil der Webserver sich über
-die Internetfreigabe des Laptops nicht selbst erreichen kann. Nach dem Umzug nach
-Hause muss geprüft werden, ob die Meldungen verschwinden.
-
-**Der E-Mail-Server ist noch nicht konfiguriert.** Ohne ihn können Benutzer ihr
-Passwort nicht selbst zurücksetzen.
-
-**Benutzerkonten und Gruppen werden neu angelegt.** Die endgültigen Konten,
-Gruppen und gemeinsamen Ordner werden in einem Durchgang erstellt, sobald das
-Konzept feststeht. Das Administratorkonto bleibt bis dahin unverändert.
-
-**Trennung von Administration und täglicher Nutzung fehlt.** Geplant ist ein
-eigenes Konto für die Administration, das tägliche Konto ohne
-Administratorrechte.
-
+ 
+**Reste der internen Zertifizierungsstelle von Caddy.** Unter
+`caddy/data/caddy/pki/` und `caddy/data/caddy/certificates/local/` liegen
+Dateien vom Versuch am 30.09.2026. Sie werden nicht verwendet und können
+entfernt werden.
+ 
 ## Speicher und Backup
-
-**Die Datenmenge kann bis zu 4 TB betragen, für Backups steht aber nur eine
-1TB-Festplatte zur Verfügung.** Es muss festgelegt werden, welche Daten gesichert
-werden (wichtige Fotos und ausgewählte Videos) und welche nicht.
-
-**Die Daten liegen aktuell auf der externen 1TB-Festplatte.** Sie muss später auf
-die 4TB-Festplatte verschoben werden, dann geht die externe Festplatte ins
-Backup.
-
-**Docker startet vor dem Einbinden der Datenfestplatte.** Beim Hochfahren war
-`/mnt/clouddata` noch nicht eingebunden, Docker band das leere Verzeichnis in
-den Container ein, und Nextcloud meldete `.ncdata` fehle. Die Daten waren
-unversehrt. Geloest mit einer Ergaenzung fuer den Dienst:
-`RequiresMountsFor=/mnt/clouddata`. Geloest am 04.10.2026.
-
-**Die Laufwerksbuchstaben wechseln.** Am 04.10.2026 tauschten `sdb` und `sdc`
-ohne Zutun die Plaetze. Deshalb stehen in `/etc/fstab` UUIDs und keine
-Gerätenamen — mit Buchstaben waere die Sicherungsfestplatte als
-Datenverzeichnis eingebunden worden.
-
-**Abgebrochene Proxmox-Befehle hinterlassen Reste.** Ein unterbrochenes
-`qm set` legt die Datei an, schreibt aber die Konfiguration nicht. `qm rescan`
-findet solche Reste normalerweise — bei einem unvollstaendigen qcow2 nicht,
-weil der Kopf fehlt und Proxmox die Datei nicht als Datentraeger erkennt.
-
-## Proxmox
-
-**Beim Aktualisieren der Paketliste erscheint ein Fehler** (`apt-get update`).
-Vermutlich sind die Enterprise-Paketquellen ohne Abonnement eingetragen. Zu
-prüfen unter `pve` → Updates → Repositories.
-
+ 
+**Die Wiederherstellung aus der rsync-Sicherung ist nicht getestet.** VM und
+Datenbank wurden zurückgespielt, die Daten auf der externen Festplatte noch
+nicht. Geht nur zu Hause, weil die Festplatte getrennt aufbewahrt wird.
+ 
+**Eine fehlgeschlagene Sicherung der Daten wird nicht wiederholt.** Ist die
+externe Festplatte zur geplanten Zeit nicht angeschlossen, bricht das Skript
+ab und es kommt eine E-Mail. `Persistent=true` holt nur **verpasste**
+Ausführungen nach, nicht **fehlgeschlagene**. Nach dem Anschliessen wird die
+Sicherung von Hand gestartet.
+ 
 ## Sicherheit
-
-**Auch mit VPN bleiben Risiken bestehen.** Wenn ein Smartphone mit einem
-WireGuard-Schlüssel verloren geht, hat der Finder Zugriff auf das Netzwerk.
-Deshalb bekommt jedes Gerät eine eigene Verbindung, damit einzelne Schlüssel
+ 
+**Auch mit VPN bleiben Risiken bestehen.** Wenn ein Gerät mit einem
+WireGuard-Schlüssel verloren geht, hat der Finder Zugriff auf Nextcloud (bei
+einem Benutzer) bzw. auf das Heimnetz (beim eigenen Verwaltungsgerät).
+Deshalb hat jedes Gerät eine eigene Verbindung, damit einzelne Schlüssel
 gesperrt werden können.
-
+ 
+**Das Stammzertifikat auf den Geräten der Benutzer.** Wer `server.key`
+besitzt, könnte Zertifikate für beliebige Webseiten ausstellen. Siehe
+`sicherheit.md`.
+ 
 **Die Festplatten sind nicht verschlüsselt.** Bei einem Diebstahl des Servers
 könnten die Daten gelesen werden. Zu prüfen, ob eine Verschlüsselung sinnvoll
 ist.
-
+ 
 **Die Datei `.env` enthält die Passwörter der Datenbank** und darf nie in Git
-aufgenommen werden. Sie steht in der `.gitignore`.
-
-**In der öffentlichen Dokumentation werden keine echten IP-Adressen und keine
-DynDNS-Namen verwendet**, sondern Platzhalter.
-
+aufgenommen werden. Sie steht in der `.gitignore`, ebenso `*.key` und die
+Konfigurationen der WireGuard-Teilnehmer.
+ 
+**In der öffentlichen Dokumentation werden keine echten öffentlichen
+Adressen und keine DynDNS-Namen verwendet**, sondern Platzhalter.
+ 
 ## Smartphones
-
+ 
 **Die Smartphones der Benutzer (Android) haben eine aggressive
 Akku-Optimierung.** Diese kann den automatischen Upload von Fotos im Hintergrund
 stoppen. Für die Nextcloud-App muss die Akku-Optimierung deaktiviert werden, bei
 Xiaomi zusätzlich der Autostart erlaubt werden.
-
+ 
+**Der automatische Upload funktioniert nur, wenn der Server läuft.** Ausserhalb
+der Betriebszeit sammeln die Smartphones die Fotos und laden sie beim nächsten
+Mal hoch.
+ 
+## Hinweise ohne Handlungsbedarf
+ 
+**Abgebrochene Proxmox-Befehle hinterlassen Reste.** Ein unterbrochenes
+`qm set` legt die Datei an, schreibt aber die Konfiguration nicht. `qm rescan`
+findet solche Reste normalerweise — bei einem unvollständigen qcow2 nicht,
+weil der Kopf fehlt und Proxmox die Datei nicht als Datenträger erkennt.
+ 
+**Die Laufwerksbuchstaben wechseln.** Am 04.10.2026 tauschten `sdb` und `sdc`
+ohne Zutun die Plätze. Deshalb stehen in `/etc/fstab` UUIDs und keine
+Gerätenamen.
+ 
+**Meldung "Keine gültige Subskription" in Proxmox.** Erscheint bei jeder
+Anmeldung ohne Abonnement und lässt sich nicht offiziell abschalten. Sie hat
+keinen Einfluss auf die Funktion.
+ 
 ## Gelöst
-
-|                    Problem                           |                   Gelöst am                      |
-|                      ---                             |                      ---                         |
-| Zugriff nur über HTTP, kein HTTPS                    | 30.09.2026                                       |
-| Maximale Uploadgrösse zu klein für grosse Videos     | 30.09.2026                                       |
-| ffmpeg nur im laufenden Container installiert        | 01.10.2026, eigenes Dockerfile                   |
-| Zwei-Faktor-Authentisierung nicht aktiviert          | 01.10.2026                                       |
-| Backup der Datenbank fehlte                          | 29.09.2026, mysqldump mit Wiederherstellungstest |
-| Annahme Carrier-Grade-NAT war falsch                 | 04.10.2026, oeffentliche IPv4 vorhanden          |
-| Selbstpruefungen von Nextcloud schlugen fehl         | 05.10.2026, Ursache DNS der VM                   |
-| E-Mail-Server nicht konfiguriert                     | 05.10.2026, SMTP ueber Gmail                     |
-| Benutzerkonten und Gruppen provisorisch              | 05.10.2026                                       |
-| Trennung von Administration und Alltag fehlte        | 05.10.2026                                       |
-| Daten lagen auf der externen 1TB-Festplatte          | 02.10.2026                                       |
-| apt-get update auf Proxmox schlug fehl               | 02.10.2026, no-subscription                      |
-| Server war nur ueber die Internetfreigabe erreichbar | 02.10.2026, Umzug nach Hause                     | 
-
+ 
+|                    Problem                           |                   Gelöst am                           |
+|                      ---                             |                      ---                              |
+| Backup der Datenbank fehlte                          | 29.09.2026, mysqldump mit Wiederherstellungstest      |
+| Zugriff nur über HTTP, kein HTTPS                    | 30.09.2026                                            |
+| Maximale Uploadgrösse zu klein für grosse Videos     | 30.09.2026                                            |
+| ffmpeg nur im laufenden Container installiert        | 01.10.2026, eigenes Dockerfile                        |
+| Zwei-Faktor-Authentisierung nicht aktiviert          | 01.10.2026                                            |
+| Daten lagen auf der externen 1TB-Festplatte          | 02.10.2026, Umzug auf 4TB                             |
+| Server war nur über die Internetfreigabe erreichbar  | 02.10.2026, Umzug nach Hause                          |
+| Docker startete vor dem Einbinden der Datenfestplatte| 04.10.2026, `RequiresMountsFor=/mnt/clouddata`        |
+| Annahme Carrier-Grade-NAT war falsch                 | 04.10.2026, öffentliche IPv4 vorhanden                |
+| Selbstprüfungen von Nextcloud schlugen fehl          | 05.10.2026, Ursache DNS der VM                        |
+| E-Mail-Server nicht konfiguriert                     | 05.10.2026, SMTP über Gmail                           |
+| Benutzerkonten und Gruppen provisorisch              | 05.10.2026                                            |
+| Trennung von Administration und Alltag fehlte        | 05.10.2026                                            |
+| 4 TB Daten, aber nur 1 TB für die Sicherung          | 06.10.2026, Regel: nur der Ordner Foto-Video          |
+| VPN-Teilnehmer der FRITZ!Box erreichen das Heimnetz  | 06.10.2026, Server-VPN für die Benutzer               |
+| Geplante Aufgaben liefen nur im Betrieb              | 06.10.2026, systemd-Timer mit `Persistent=true`       |
+| Dumps der Datenbank für alle Benutzer lesbar         | 06.10.2026, `chmod 600` und `UMask=0077`              |
+| Fehler einer Sicherung fiel niemandem auf            | 06.10.2026, E-Mail über `OnFailure=`                  |
+| `apt-get update` auf Proxmox schlug fehl             | 06.10.2026, Paketquelle `no-subscription`             |
+ 
