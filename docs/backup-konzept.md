@@ -9,7 +9,7 @@ Sicherung des Systems aufnehmen, obwohl sie selbst Originaldaten enthaelt.
 |    Festplatte    |         Original          |                    Sicherung von                           | 
 |       ---        |            ---            |      ---                ---               ---              |
 | SSD 250 GB (M.2) | System, Docker, Datenbank | –                                                          |
-| HDD 4 TB         | Fotos und Videos          | System (vzdump) und Datenbank (ca. 20 GB)                  |
+| HDD 4 TB         | Fotos und Videos          | System (vzdump) und Datenbank (ca. 1 MB pro Dump)          |
 | HDD 1 TB extern  | –                         | 500 GB wichtige Fotos und Videos, zweite Kopie des Systems |
 
 ### Ablauf
@@ -19,8 +19,36 @@ Sicherung des Systems aufnehmen, obwohl sie selbst Originaldaten enthaelt.
 | Virtuelle Maschine        | vzdump    | HDD 4 TB        | taeglich Mo–Fr  |
 | Datenbank                 | mysqldump | HDD 4 TB        | taeglich        |
 | Wichtige Fotos und Videos | rsync     | HDD 1 TB extern | woechentlich    |
-| Kopie des Systems         | rsync     | HDD 1 TB extern | woechentlich    |
 | Konfigurationsdateien     | von Hand  | USB-Stick 64 GB | bei Aenderungen |
+
+### Ausschluesse beim rsync
+
+Nicht gesichert werden die Vorschaubilder (`appdata_*/preview/`) und der
+Papierkorb (`*/files_trashbin/`). Vorschaubilder erzeugt Nextcloud bei Bedarf
+aus den Originalen neu und sie brauchen viel Platz. Der Papierkorb enthaelt
+vom Benutzer bereits geloeschte Dateien. Beides ist ein bewusst akzeptiertes
+Risiko: Faellt die 4TB-Festplatte aus, ist der Papierkorb verloren.
+
+### Aufbewahrung
+
+- vzdump: `keep-last=5` in der Speicherkonfiguration von Proxmox
+- Datenbank: `find /srv/backup/db -name '*.sql.gz' -mtime +30 -delete`
+- rsync: Spiegel mit `--delete`, keine Versionen
+
+### Einschraenkung: der Server laeuft nicht rund um die Uhr
+
+Cron fuehrt eine Aufgabe nur aus, wenn der Rechner zu diesem Zeitpunkt
+laeuft, und holt sie nicht nach. Deshalb wurden die geplanten Sicherungen bis
+zum 05.10.2026 nie automatisch ausgefuehrt, obwohl die Zeiten seit dem
+02.10.2026 eingetragen waren. Festgestellt durch Kontrolle von
+`/srv/backup/db/` und `/var/log/nextcloud-data-backup.log`: dort standen nur
+die von Hand gestarteten Durchgaenge.
+
+Geplante Loesung: Der Server weckt sich nachts ueber die Hardware-Uhr
+(`rtcwake`), fuehrt die Sicherungen der Reihe nach aus und schaltet sich
+wieder ab. Zusaetzlich systemd-Timer mit `Persistent=true`, die eine
+verpasste Ausfuehrung nach dem naechsten Start nachholen — etwas, das cron
+nicht kann.
 
 ### Warum kein USB-Stick fuer die taeglichen Sicherungen
 
@@ -44,11 +72,19 @@ Sicherung wuerde eine weitere Festplatte mit 4 TB erfordern.
 Eine Erweiterung ist in ein bis zwei Jahren vorgesehen, falls die Cloud
 regelmaessig genutzt wird und die Datenmenge tatsaechlich waechst.
 
-### Regel fuer "wichtig"
+### Regel fuer "wichtig" (festgelegt am 06.10.2026)
 
-Damit die Auswahl nachvollziehbar bleibt, wird eine feste Regel definiert statt
-nach Gefuehl entschieden, zum Beispiel: Alle Dateien im Ordner "Wichtig" sowie
-alle Fotos der letzten zwei Jahre. Alles andere wird nicht gesichert.
+Gesichert wird ausschliesslich der gemeinsame Ordner **Foto-Video**. Die
+persoenlichen Ordner der Benutzer werden **nicht** gesichert.
+
+Begruendung: Die Sicherungsfestplatte hat 1 TB, die Datenfestplatte 4 TB. Eine
+vollstaendige Sicherung ist damit unmoeglich, und eine Auswahl nach Gefuehl
+waere nicht nachvollziehbar. Ein gemeinsamer Ordner als Kriterium ist eindeutig:
+Wer etwas gesichert haben will, legt es dorthin.
+
+Folge fuer die Benutzer: Dateien in den persoenlichen Ordnern existieren nur
+einmal. Faellt die 4TB-Festplatte aus, sind sie verloren. Darauf werden die
+Benutzer in der Anleitung ausdruecklich hingewiesen.
 
 ### Aufbewahrungsort
 

@@ -1,6 +1,6 @@
 # Sicherheitskonzept
 
-Stand: 01.10.2026
+Stand: 05.10.2026
 
 Die Sicherheit beruht nicht auf einer einzelnen Massnahme, sondern auf mehreren
 unabhängigen Schichten. Fällt eine aus, schützen die übrigen weiter. Dieses
@@ -10,7 +10,7 @@ Prinzip heisst **Defense in Depth**.
 
 |           Schicht           |        Wogegen sie schützt             |     Stand    |
 |             ---             |               ---                      |      ---     |
-| VPN                         | Zugriff aus dem Internet               | geplant      |
+| VPN                         | Zugriff aus dem Internet               | eingerichtet |
 | Firewall (ufw)              | nicht benötigte offene Ports           | eingerichtet |
 | HTTPS                       | Mitlesen des Datenverkehrs             | fertig       |
 | Zertifikat                  | gefälschter Server (Man-in-the-Middle) | fertig       |
@@ -18,8 +18,10 @@ Prinzip heisst **Defense in Depth**.
 | Anmeldung                   | Zugriff durch Unbefugte                | fertig       |
 | Zwei-Faktor-Authentisierung | gestohlenes Passwort                   | fertig       |
 | Brute-Force-Schutz          | Durchprobieren von Passwörtern         | aktiv        |
-| Benutzer und Gruppen        | Zugriff auf fremde Dateien             | in Arbeit    |
-| Backup                      | Datenverlust                           | teilweise    |
+| Benutzer und Gruppen        | Zugriff auf fremde Dateien             | fertig       |
+| Backup                      | Datenverlust                           | fertig       |
+| Netzwerktrennung            | Zugriff auf fremde Geraete im Heimnetz | geplant      |
+| Zweiter Faktor am Router    | Fernaenderung der Router-Konfiguration | aktiv        |
 
 ## HTTPS und Zertifikat
 
@@ -178,9 +180,14 @@ Nextcloud meldete die Adresse des Laptops, nicht die des Containers.
   eigene Speicherbegrenzung
 - Passwörter werden als Hash gespeichert, nicht im Klartext
 
-**Geplant:** Trennung von Administration und täglicher Nutzung. Das Konto für
-den Alltag erhält keine Administratorrechte, damit ein kompromittiertes Konto
-nicht gleich die ganze Installation gefährdet.
+**Umgesetzt am 05.10.2026.** Es gibt zwei Konten: eines in der Gruppe `admin`
+ausschliesslich fuer die Verwaltung, eines ohne Sonderrechte fuer den Alltag
+und fuer die Smartphone-App. Ein kompromittiertes Alltagskonto hat damit
+keine Administratorrechte.
+
+Die Zwei-Faktor-Authentisierung ist nur fuer die Gruppe `admin`
+verpflichtend. Fuer die uebrigen Benutzer wird sie empfohlen, aber nicht
+erzwungen — eine bewusste Entscheidung bei drei Benutzern aus einem Haushalt.
 
 ## Verbleibende Risiken
 
@@ -206,3 +213,17 @@ häufigste Ursache für Probleme bei selbst betriebenen Servern.
 **Unvollständiges Backup.** Von den Daten werden nur die als wichtig
 eingestuften gesichert. Die Entscheidung ist bewusst getroffen und in
 `backup-konzept.md` begründet.
+
+**Die Sicherung der Konfiguration enthaelt ein Passwort.** Das
+Backup-Skript kopiert `config.php`, und darin steht seit dem 05.10.2026 das
+SMTP-Passwort im Klartext — Nextcloud kann es nicht anders speichern.
+Deshalb wird ein App-Passwort von Google verwendet und nicht das
+Kontopasswort: es gilt nur fuer den Mailversand und laesst sich einzeln
+widerrufen. Die externe Sicherungsfestplatte ist damit selbst Traeger eines
+Geheimnisses.
+
+**VPN-Teilnehmer der FRITZ!Box erreichen das ganze Heimnetz.** Der Router
+kann den Zugriff einzelner Teilnehmer nicht einschraenken. Zugang erhaelt
+deshalb nur, wem auch physischer Zugang zur Wohnung zugestanden wird. Fuer
+weitere Benutzer ist ein zweiter WireGuard-Server auf der VM geplant, dessen
+Teilnehmer ueber Firewall-Regeln ausschliesslich Nextcloud erreichen.

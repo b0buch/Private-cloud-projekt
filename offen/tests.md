@@ -38,33 +38,38 @@
 - [x] **Vorschaubilder für Videos.** Funktionieren mit ffmpeg im eigenen Image.
       (30.09.2026, nach dem Neuaufbau bestätigt am 01.10.2026)
 
-## Offen — kann am Arbeitsplatz gemacht werden
+- [x] **Zwei-Faktor-Authentisierung mit der Nextcloud-App.** Getestet am
+      05.10.2026 ueber VPN. Die Annahme, die App umgehe 2FA ueber
+      App-Passwoerter, war falsch: Die App verwendet die browserbasierte
+      Anmeldung (Login Flow v2), und dabei wird der zweite Faktor verlangt.
 
-- [ ] Prüfen, ob der Cronjob wirklich alle fünf Minuten läuft (Zeitpunkt der
-      letzten Ausführung in den Administrationseinstellungen).
+- [x] Ist die zusätzliche IPv4-Adresse bei InterXS monatlich kündbar und wie
+      lange dauert die Aktivierung?
+- [x] Welcher Router hängt zu Hause direkt am Anschluss? Bei zwei Routern
+      hintereinander (Double NAT) funktioniert WireGuard nicht.
+- [x] Ändert die zusätzliche IPv4-Adresse etwas an der Telefonie im Haushalt?
+
+- [x] **Zugriff mit dem Smartphone im lokalen Netzwerk.** (02.10.2026)
+- [x] **Selbstpruefungen nach dem Umzug.** Alle sechs netzwerkbezogenen
+      Pruefungen sind verschwunden, nachdem der DNS-Server der VM von 1.1.1.1
+      auf die FRITZ!Box umgestellt wurde. (05.10.2026)
+- [x] **VPN ueber das Mobilfunknetz.** Zugriff auf Proxmox und Nextcloud per
+      IP und per Name, WLAN ausgeschaltet. (04.10.2026)
+- [x] **Nextcloud ist ohne VPN nicht erreichbar.** Ueber Mobilfunk ohne
+      aktives VPN keine Verbindung. Es existiert keine Portweiterleitung auf
+      443. (04.10.2026)
+- [x] **Cronjob laeuft alle fuenf Minuten.** Bestaetigt ueber
+      `occ config:app:get core lastcron` und die Selbstpruefung
+      "Cron last run". (05.10.2026)
+- [x] **Sicherung der Daten mit rsync.** Erster Durchgang: 93 Dateien,
+      1.5 GiB. Zweiter Durchgang unmittelbar danach: 0 Dateien uebertragen,
+      7 598 Byte gesendet. rsync vergleicht Groesse und Aenderungszeit und
+      ueberspringt unveraenderte Dateien — eine taegliche Sicherung kostet
+      deshalb kaum etwas. (05.10.2026, Testdateien)
 
 ## Offen — erst nach dem Umzug nach Hause
 
-- [ ] Zugriff mit dem Smartphone im lokalen Netzwerk testen.
 - [ ] Automatischen Upload von Fotos auf allen drei Smartphones testen,
       besonders im Hintergrund über mehrere Stunden (Akku-Optimierung).
-- [ ] Prüfen, ob die fehlgeschlagenen Selbstprüfungen von Nextcloud nach dem
-      Umzug an die FRITZ!Box verschwinden.
-- [ ] VPN über das Mobilfunknetz testen, nicht nur im eigenen WLAN.
-- [ ] Prüfen, dass Nextcloud **nicht** ohne VPN aus dem Internet erreichbar ist.
 - [ ] Den Upload eines grossen Videos über VPN testen (Zeit messen, der
       Anschluss hat 50 Mbit/s im Upload).
-
-# Tailscale zu Hause einrichten und mit WireGuard vergleichen
-    Tailscale wurde im Firmennetz nach Absprache mit dem Berufsbildner nicht
-    installiert. Der Test erfolgt zu Hause.
-    Die Zwei-Faktor-Authentisierung mit der Nextcloud-App auf dem Smartphone
-    testen (die App verwendet App-Passwoerter und umgeht 2FA).
-
-## Abzuklären
-
-- [ ] Ist die zusätzliche IPv4-Adresse bei InterXS monatlich kündbar und wie
-      lange dauert die Aktivierung?
-- [ ] Welcher Router hängt zu Hause direkt am Anschluss? Bei zwei Routern
-      hintereinander (Double NAT) funktioniert WireGuard nicht.
-- [ ] Ändert die zusätzliche IPv4-Adresse etwas an der Telefonie im Haushalt?

@@ -226,3 +226,33 @@ docker compose exec -u www-data app php occ db:add-missing-primary-keys
 Ein Index kostet Speicherplatz und macht das Schreiben etwas langsamer, dafür
 wird das Lesen deutlich schneller. Bei wenigen Dateien fällt das nicht auf, bei
 zehntausenden Videos sehr wohl.
+
+
+## Parameter der Datenbank pruefen
+
+```sql
+SHOW VARIABLES WHERE Variable_name IN
+  ('innodb_log_file_size','slow_query_log','long_query_time');
+```
+
+Die Selbstpruefung von Nextcloud meldete am 05.10.2026 mehrere
+Empfehlungen. Umgesetzt wurden drei: das Protokoll langsamer Abfragen
+einschalten, die Schwelle von 10 auf 2 Sekunden senken und
+`innodb_log_file_size` von 96 MiB auf 256 MiB erhoehen. Die Parameter stehen
+in der `command:`-Zeile des Dienstes `db` in der `docker-compose.yml`.
+
+## Eine Meldung, die man nicht beheben darf
+
+Die Pruefung `Slave_lag` meldete `Alert: A configured replica is not
+running`. In der `docker-compose.yml` ist `--log-bin=binlog` gesetzt, das
+binaere Protokoll ist also aktiv. Die Pruefung schliesst daraus auf eine
+eingerichtete Replikation, findet `Slave_running = OFF` und meldet einen
+Ausfall.
+
+Es gibt aber keine Replik und es ist keine geplant. Das binaere Protokoll
+dient hier einem anderen Zweck: Zusammen mit dem naechtlichen Dump erlaubt es
+eine Wiederherstellung auf einen beliebigen Zeitpunkt, nicht nur auf den
+Stand des Dumps.
+
+Die Pruefung hat also kein Problem gefunden, sondern die Konfiguration falsch
+gedeutet. Richtiges Vorgehen: nichts aendern und den Grund festhalten.

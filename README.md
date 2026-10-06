@@ -53,18 +53,21 @@ jeder mit einem eigenen Konto und eigenem Speicherbereich.
 | Proxmox und Ubuntu-VM                      | fertig                                    |
 | Docker und Docker Compose                  | fertig                                    |
 | Nextcloud, MariaDB, Redis                  | fertig                                    |
-| Datenfestplatte und Verschiebung der Daten | fertig (Test mit externer 1TB-Festplatte) |
+| Datenfestplatte und Verschiebung der Daten | fertig (4TB, qcow2 auf LVM)               |
 | Backup der VM (vzdump)                     | fertig                                    |
-| Benutzer und Gruppen                       | in Arbeit                                 |
+| Benutzer und Gruppen                       | fertig                                    |
 | Backup der Datenbank (mysqldump)           | fertig                                    |
-| VPN (WireGuard)                            | offen, erst nach dem Umzug nach Hause     |
-| Zugriff mit dem Smartphone                 | offen, erst nach dem Umzug nach Hause     |
+| VPN (WireGuard)                            | Router fertig, Server-VPN geplant         |
+| Zugriff mit dem Smartphone                 | fertig                                    |
 | Eigenes Docker-Image mit ffmpeg            | fertig                                    |
 | Datenfestplatte mit LVM                    | fertig                                    |
 | HTTPS mit Reverse Proxy und Zertifikat     | fertig                                    |
 | Zwei-Faktor-Authentisierung                | fertig                                    |
 | Brute-Force-Schutz                         | geprüft                                   |
-| 4TB-Festplatte einbauen                    | wartet auf Lieferung                      |
+| 4TB-Festplatte einbauen                    | fertig (02.10.2026)                       |
+| Umzug nach Hause                           | fertig (02.10.2026)                       |
+| E-Mail-Versand                             | fertig                                    |  
+| Geplante Aufgaben (cron)                   | eingerichtet, laufen nur im Betrieb       |
 
 ---
 

@@ -2,29 +2,6 @@
 
 Ideen und Entscheidungen für Punkte, die später umgesetzt werden.
 
-## Fernzugriff: zuerst WireGuard, später Tailscale
-
-**Entscheidung:** Für die Projektphase wird beim Anbieter InterXS für einen Monat
-eine öffentliche statische IPv4-Adresse dazubestellt (5 CHF pro Monat). Damit
-funktioniert WireGuard direkt auf der FRITZ!Box 7490 mit Portweiterleitung.
-
-Nach dem Projekt wird auf **Tailscale** gewechselt, damit keine monatlichen
-Kosten mehr entstehen. Tailscale funktioniert auch hinter Carrier-Grade-NAT, weil
-beide Geräte eine ausgehende Verbindung zu einem Koordinationsserver aufbauen und
-keine Portweiterleitung nötig ist.
-
-**Vorteil dieser Lösung:** Im Projekt wird das VPN selbst konfiguriert und
-verstanden, im Betrieb wird danach die günstigere Variante genutzt. In der
-Dokumentation lassen sich beide Varianten vergleichen.
-
-|                          | WireGuard auf der FRITZ!Box |              Tailscale            |
-|           ---            |             ---             |                ---                |
-| Kosten                   |   5 CHF/Monat für die IPv4  |       gratis bis 100 Geräte       |
-| Funktioniert hinter CGNAT|            nein             |               ja                  |
-| Aufwand beim Einrichten  |            mittel           |               klein               |
-| Lerneffekt               |            hoch             |               gering              |
-| Abhängigkeit von Dritten |            keine            | Koordinationsserver von Tailscale |
-
 ## Mehrere Festplatten: LVM
 
 Wenn später weitere Festplatten dazukommen, werden sie mit LVM zu einer Volume
@@ -41,8 +18,8 @@ lvcreate -l 100%FREE -n clouddata-lv clouddata-vg
 Neue Festplatten können später mit `vgextend`, `lvextend` und `resize2fs` im
 laufenden Betrieb hinzugefügt werden.
 
-> **Wichtig:** Die 4TB-Festplatte von Anfang an als LVM einrichten, auch wenn sie
-> zuerst allein ist. Sonst müssen später alle Daten neu kopiert werden.
+- [x] **Wichtig:** Die 4TB-Festplatte von Anfang an als LVM einrichten, auch wenn sie
+      zuerst allein ist. Sonst müssen später alle Daten neu kopiert werden. (02.10.2026)
 
 **Nachteil von LVM ohne RAID:** Fällt eine Festplatte aus, ist das ganze
 Dateisystem betroffen, nicht nur der Teil auf dieser Festplatte. Ein Backup ist
@@ -66,7 +43,7 @@ Gemeinsame Ordner (Team folders) haben eine eigene Quota. Eine Datei in einem
 gemeinsamen Ordner zählt zur Quota des Ordners, nicht zu der des Benutzers, der
 sie hochgeladen hat.
 
-## Backup der Datenbank (geplant)
+## Backup der Datenbank 
 
 Ein Skript, das per Cron läuft:
 
@@ -97,8 +74,14 @@ Reihenfolge:
    erweitern
 6. Die freie 1TB-Festplatte neu formatieren und als Sicherungsziel einrichten
 
+**Abweichung vom geplanten Ablauf.** pvmove wurde bewusst nicht verwendet.
+Der Befehl verschiebt alle zugewiesenen Extents, nicht die belegten Daten:
+931.51 GiB waren zugewiesen, aber nur 7.8 GB belegt. Auf Festplatten mit
+5400 U/min haette das drei bis vier Stunden gedauert. Stattdessen wurden die
+Daten mit rsync kopiert (1 Minute 9 Sekunden), wobei zu keinem Zeitpunkt nur
+eine Kopie existierte.
 
-## Stromverbrauch senken (Idee fuer spaeter)
+## Nachtbetrieb mit rtcwake (notwendig fuer die Sicherungen)
 
 Der Server muss nicht rund um die Uhr laufen. Bei etwa 45 Watt im Leerlauf sind
 das ungefaehr 400 kWh im Jahr. Wenn er nur wenige Stunden taeglich laeuft, sinkt
@@ -141,6 +124,14 @@ Beispiel:
 
     rtcwake -m no -t $(date +%s -d 'tomorrow 02:00')
     shutdown -h now
+
+
+
+Tailscale wurde nicht getestet. Entscheidung vom 05.10.2026: Der Vergleich
+bringt fuer das Projektziel keinen zusaetzlichen Nutzen, weil WireGuard die
+Anforderung bereits erfuellt und kein Carrier-Grade-NAT vorliegt. Der Vergleich
+in vpn.md stuetzt sich auf die Dokumentation beider Loesungen und ist als
+solcher gekennzeichnet.
 
 ### Zu beachten
 

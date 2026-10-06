@@ -5,33 +5,19 @@ können.
 
 ## Netzwerk
 
-**Der Internetanbieter InterXS verwendet Carrier-Grade-NAT.** Der Anschluss hat
-keine eigene öffentliche IPv4-Adresse, deshalb ist eine Portweiterleitung über
-IPv4 nicht möglich. Es gibt eine feste IPv6-Adresse (/64).
-Mögliche Lösungen: WireGuard über IPv6 nutzen, eine öffentliche IPv4 für
-5 CHF pro Monat dazubestellen, oder einen Dienst wie Tailscale verwenden, der
-ohne Portweiterleitung funktioniert.
-→ Entscheidung siehe `loesungen.md`
+**Die Heimnetz-Subnetz 192.168.178.0/24 ist die Werkseinstellung der
+FRITZ!Box.** Dadurch kollidiert sie mit fremden Netzen: Ein Mobilfunk-Hotspot
+oder ein Gastnetz mit demselben Bereich macht die VPN-Verbindung unbrauchbar,
+weil zwei Routen auf dieselbe Subnetz zeigen. Geplant: Umstellung auf einen
+seltenen Bereich wie 10.17.23.0/24. Das erfordert neue Reservierungen, neue
+WireGuard-Verbindungen und Anpassung der Dokumentation.
 
-**Die VM erhält ihre IP-Adresse aktuell über die Internetfreigabe des Laptops**
-(`192.168.137.x`). Zu Hause an der FRITZ!Box gilt ein anderer Adressbereich
-(`192.168.178.x`). Alle Konfigurationen mit fester IP-Adresse müssen dann
-angepasst werden: `trusted_domains`, `overwrite.cli.url`, `.env`, netplan und
-`/etc/network/interfaces` auf dem Proxmox-Host.
+**VPN-Teilnehmer der FRITZ!Box erreichen das ganze Heimnetz.** Der Router
+kann den Zugriff einzelner Teilnehmer nicht einschraenken. Geplant: ein
+zweiter WireGuard-Server auf der VM, dessen Teilnehmer ueber Firewall-Regeln
+nur auf Nextcloud zugreifen koennen.
 
-**Der Server braucht zu Hause eine feste IP-Adresse.** Wird in der FRITZ!Box
-unter Heimnetz → Netzwerk zugewiesen. Mit reinem DHCP könnte sich die Adresse
-ändern und der Zugriff auf die Cloud würde nicht mehr funktionieren.
-
-**Zu prüfen:** Welches Router-Modell steht zu Hause wirklich (eigene 7490 oder
-ein Gerät vom Anbieter) und welche FRITZ!OS-Version ist installiert? WireGuard
-braucht mindestens FRITZ!OS 7.50.
-
-Die Netzwerkverbindung ueber die Internetfreigabe des Laptops ist
-anfaellig. Sie bietet kein IPv6 und die Konfiguration geht bei einem
-Neustart des Laptops leicht verloren. Nach dem Umzug an die FRITZ!Box
-sollten diese Probleme wegfallen.
-
+**Geplante Aufgaben laufen nur im Betrieb.** Siehe server.md.
 
 ## Nextcloud
 
@@ -60,6 +46,22 @@ werden (wichtige Fotos und ausgewählte Videos) und welche nicht.
 **Die Daten liegen aktuell auf der externen 1TB-Festplatte.** Sie muss später auf
 die 4TB-Festplatte verschoben werden, dann geht die externe Festplatte ins
 Backup.
+
+**Docker startet vor dem Einbinden der Datenfestplatte.** Beim Hochfahren war
+`/mnt/clouddata` noch nicht eingebunden, Docker band das leere Verzeichnis in
+den Container ein, und Nextcloud meldete `.ncdata` fehle. Die Daten waren
+unversehrt. Geloest mit einer Ergaenzung fuer den Dienst:
+`RequiresMountsFor=/mnt/clouddata`. Geloest am 04.10.2026.
+
+**Die Laufwerksbuchstaben wechseln.** Am 04.10.2026 tauschten `sdb` und `sdc`
+ohne Zutun die Plaetze. Deshalb stehen in `/etc/fstab` UUIDs und keine
+Gerätenamen — mit Buchstaben waere die Sicherungsfestplatte als
+Datenverzeichnis eingebunden worden.
+
+**Abgebrochene Proxmox-Befehle hinterlassen Reste.** Ein unterbrochenes
+`qm set` legt die Datei an, schreibt aber die Konfiguration nicht. `qm rescan`
+findet solche Reste normalerweise — bei einem unvollstaendigen qcow2 nicht,
+weil der Kopf fehlt und Proxmox die Datei nicht als Datentraeger erkennt.
 
 ## Proxmox
 
@@ -93,11 +95,19 @@ Xiaomi zusätzlich der Autostart erlaubt werden.
 
 ## Gelöst
 
-|                    Problem                       |                   Gelöst am                      |
-|                      ---                         |                      ---                         |
-| Zugriff nur über HTTP, kein HTTPS                | 30.09.2026                                       |
-| Maximale Uploadgrösse zu klein für grosse Videos | 30.09.2026                                       |
-| ffmpeg nur im laufenden Container installiert    | 01.10.2026, eigenes Dockerfile                   |
-| Zwei-Faktor-Authentisierung nicht aktiviert      | 01.10.2026                                       |
-| Backup der Datenbank fehlte                      | 29.09.2026, mysqldump mit Wiederherstellungstest |
+|                    Problem                           |                   Gelöst am                      |
+|                      ---                             |                      ---                         |
+| Zugriff nur über HTTP, kein HTTPS                    | 30.09.2026                                       |
+| Maximale Uploadgrösse zu klein für grosse Videos     | 30.09.2026                                       |
+| ffmpeg nur im laufenden Container installiert        | 01.10.2026, eigenes Dockerfile                   |
+| Zwei-Faktor-Authentisierung nicht aktiviert          | 01.10.2026                                       |
+| Backup der Datenbank fehlte                          | 29.09.2026, mysqldump mit Wiederherstellungstest |
+| Annahme Carrier-Grade-NAT war falsch                 | 04.10.2026, oeffentliche IPv4 vorhanden          |
+| Selbstpruefungen von Nextcloud schlugen fehl         | 05.10.2026, Ursache DNS der VM                   |
+| E-Mail-Server nicht konfiguriert                     | 05.10.2026, SMTP ueber Gmail                     |
+| Benutzerkonten und Gruppen provisorisch              | 05.10.2026                                       |
+| Trennung von Administration und Alltag fehlte        | 05.10.2026                                       |
+| Daten lagen auf der externen 1TB-Festplatte          | 02.10.2026                                       |
+| apt-get update auf Proxmox schlug fehl               | 02.10.2026, no-subscription                      |
+| Server war nur ueber die Internetfreigabe erreichbar | 02.10.2026, Umzug nach Hause                     | 
 

@@ -4,6 +4,9 @@ Erstellt: 28.09.2026
 
 ---
 
+**Durchgefuehrt am 02.10.2026.** Die Abschnitte bleiben als Nachweis des
+Ablaufs erhalten. Korrekturen und tatsaechliche Werte sind unten eingetragen.
+
 ## Teil A — Vorbereitung (ohne Server, zu Hause am Abend)
 
 ### A1. Anschluss und Router kontrollieren
@@ -21,10 +24,10 @@ Erstellt: 28.09.2026
 
 ### A2. Öffentliche IPv4-Adresse bestellen
 
-- [ ] Bei InterXS die zusätzliche statische IPv4-Adresse bestellen (5 CHF/Monat)
-- [ ] Fragen: Ist die Option monatlich kündbar?
-- [ ] Fragen: Wie lange dauert die Aktivierung?
-- [ ] Datum der Bestellung notieren: `________________`
+Nicht notwendig. Am 04.10.2026 wurde festgestellt, dass der Anschluss bereits
+eine oeffentliche IPv4-Adresse hat. Die Annahme von Carrier-Grade-NAT war
+falsch. Die wechselnde Adresse wird ueber MyFRITZ! als Name erreichbar
+gemacht, Kosten entstehen keine.
 
 ### A3. Netzwerk vorbereiten
 
@@ -113,13 +116,11 @@ docker compose exec -u www-data app php occ \
 
 ### B6. Zertifikat neu ausstellen
 
-> Das aktuelle Zertifikat gilt nur für die Adresse am Arbeitsplatz. Mit einer
-> neuen Adresse oder einem lokalen Namen meldet der Browser sonst einen Fehler.
-
-- [ ] Neues Zertifikat mit der neuen Adresse im Feld `subjectAltName` erstellen
-- [ ] Caddy neu starten: `docker compose restart caddy`
-- [ ] Das neue Zertifikat auf allen Geräten als vertrauenswürdig installieren
-- [ ] Prüfen, dass der Browser keine Warnung mehr anzeigt
+Das Zertifikat wurde am 02.10.2026 neu ausgestellt, diesmal aber auf den
+**Namen** `privatecloud.fritz.box` statt auf eine IP-Adresse. Damit ist es
+von der Adresse unabhaengig: Ein Wechsel des Netzes oder eine neue
+DHCP-Adresse machen es nicht ungueltig. Bei einem kuenftigen Umzug entfaellt
+dieser Schritt.
 
 ---
 
@@ -127,51 +128,56 @@ docker compose exec -u www-data app php occ \
 
 ### C1. Voraussetzungen prüfen
 
-- [ ] Ist die öffentliche IPv4-Adresse aktiv? Kontrolle unter Internet →
+- [x] Ist die öffentliche IPv4-Adresse aktiv? Kontrolle unter Internet →
       Online-Monitor: Die Adresse darf nicht mehr aus dem Bereich `100.64.x.x`
       stammen.
-- [ ] Kontrolle von aussen: Die Adresse über das Mobilfunknetz (ohne WLAN)
+- [x] Kontrolle von aussen: Die Adresse über das Mobilfunknetz (ohne WLAN)
       prüfen
 
 ### C2. WireGuard auf der FRITZ!Box einrichten
 
-- [ ] Internet → Freigaben → VPN (WireGuard) → Verbindung hinzufügen
-- [ ] Typ: **Einzelnes Gerät** — für jedes Smartphone eine eigene Verbindung,
+- [x] Internet → Freigaben → VPN (WireGuard) → Verbindung hinzufügen
+- [x] Typ: **Einzelnes Gerät** — für jedes Smartphone eine eigene Verbindung,
       damit einzelne Schlüssel gesperrt werden können
-- [ ] Name der Verbindung sprechend wählen
-- [ ] QR-Code mit der WireGuard-App auf dem Handy scannen
-- [ ] Konfigurationsdatei sicher aufbewahren
+- [x] Name der Verbindung sprechend wählen
+- [x] QR-Code mit der WireGuard-App auf dem Handy scannen
+- [x] Konfigurationsdatei sicher aufbewahren
 
 ### C3. VPN testen
 
-- [ ] Test 1: Verbindung im eigenen WLAN aufbauen (sagt wenig aus)
-- [ ] Test 2: WLAN am Handy ausschalten und über das Mobilfunknetz verbinden —
+- [x] Test 1: Verbindung im eigenen WLAN aufbauen (sagt wenig aus)
+- [x] Test 2: WLAN am Handy ausschalten und über das Mobilfunknetz verbinden —
       **das ist der richtige Test**
-- [ ] Über VPN die Nextcloud-Adresse im Browser öffnen
-- [ ] Über VPN in der Nextcloud-App anmelden
+- [x] Über VPN die Nextcloud-Adresse im Browser öffnen
+- [x] Über VPN in der Nextcloud-App anmelden
 - [ ] Ein Foto hochladen und die Geschwindigkeit messen
 - [ ] Verbindung für alle drei Benutzer einrichten und testen
 
 ### C4. Sicherheit
 
-- [ ] Zwei-Faktor-Authentisierung für die beiden neuen Benutzer einrichten
+- [x] Zwei-Faktor-Authentisierung für die beiden neuen Benutzer einrichten
       (für das eigene Konto am 01.10.2026 bereits erledigt)
-- [ ] Kontrollieren, dass Nextcloud **nicht** direkt aus dem Internet erreichbar
+- [x] Kontrollieren, dass Nextcloud **nicht** direkt aus dem Internet erreichbar
       ist (keine Portweiterleitung auf Port 443)
-- [ ] Starke Passwörter für alle drei Benutzer
-- [ ] Brute-Force-Schutz von Nextcloud kontrollieren
+- [x] Starke Passwörter für alle drei Benutzer
+- [x] Brute-Force-Schutz von Nextcloud kontrollieren
 
 ---
 
-## Teil D — Nach dem Projekt
+## Was beim Umzug tatsaechlich schiefging
 
-- [ ] Tailscale auf dem Server installieren und testen
-- [ ] Zugriff über Tailscale von aussen prüfen
-- [ ] **Erst danach** die statische IPv4-Adresse bei InterXS kündigen
-- [ ] Vergleich der beiden Lösungen in der Dokumentation festhalten (Kosten,
-      Aufwand, Sicherheit, Geschwindigkeit)
+**netplan: `set-name` wirkt nicht im Betrieb.** Die Umstellung auf DHCP wurde
+mit `netplan try` versucht. Die Verbindung brach ab, weil die Maschine eine
+andere Adresse erhielt — und da die Bestaetigung nicht moeglich war, wurde
+nach 120 Sekunden alles zurueckgesetzt. Richtig ist: Netzwerkaenderungen an
+einer VM ueber die Konsole von Proxmox vornehmen, nicht ueber SSH.
 
----
+**Die Internetfreigabe von Windows antwortete nicht mehr auf DHCP.** Deshalb
+wurde die DHCP-Konfiguration nur in die Datei geschrieben und nicht
+angewendet. Zu Hause an der FRITZ!Box griff sie beim ersten Start sofort.
+
+**Docker startete vor dem Einbinden der Datenfestplatte.** Siehe
+`probleme.md`.
 
 ## Notizen
 
