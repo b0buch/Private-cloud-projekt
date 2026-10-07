@@ -96,7 +96,7 @@ docker compose exec -u www-data app php occ \
 - [x] In der Datei `.env` den Wert `TRUSTED_DOMAINS` anpassen
 - [x] Container neu starten: `docker compose up -d`
 - [x] Nextcloud im Browser öffnen und Anmeldung testen
-- [ ] Alte Einträge `192.168.137.*` aus `trusted_domains` entfernen
+- [x] Alte Einträge `192.168.137.*` aus `trusted_domains` entfernen
 ### B5. Selbstprüfungen kontrollieren
  
 - [x] Administrationseinstellungen → Übersicht öffnen

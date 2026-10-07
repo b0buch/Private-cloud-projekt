@@ -199,7 +199,7 @@ später nicht erhöhen. Kontrolle mit `df -i`.
 └── <benutzername>/         Persönlicher Ordner je Benutzer
  
 /mnt/backup-extern/         Sicherungsziel                  → 1TB extern
-└── clouddata/              Spiegel der Daten (rsync)
+└── Foto-Video/             Spiegel des Ordners Foto-Video (rsync --delete)
  
 /srv/backup/
 ├── db/                     Sicherungen der Datenbank und von config.php
