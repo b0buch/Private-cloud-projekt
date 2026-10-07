@@ -55,6 +55,20 @@ Ein Skript, das über einen systemd-Timer läuft (bis 05.10.2026 cron):
 Der Wartungsmodus ist nötig, damit Dateien und Datenbank zueinander passen.
 Ohne ihn könnte während des Dumps eine Datei hochgeladen werden, die dann in der
 Sicherung fehlt.
+
+## Kein automatischer Upload
+
+Die Nextcloud-App kann neue Fotos selbstständig hochladen. Die Funktion wird
+bewusst nicht verwendet:
+
+- Der Server läuft nicht rund um die Uhr, ein Upload im Hintergrund würde
+  oft ins Leere laufen.
+- Grosse Videos über das Mobilfunknetz brauchen viel Zeit (1.5 GB in rund
+  10 Minuten) und belasten das Datenvolumen.
+- Die Akku-Optimierung von Android stoppt Hintergrund-Uploads unzuverlässig.
+
+Fotos und Videos werden deshalb von Hand hochgeladen, grosse Dateien im WLAN
+zu Hause.
  
 ## Ablauf beim Wechsel auf die 4TB-Festplatte
  

@@ -68,17 +68,6 @@ Konfigurationen der WireGuard-Teilnehmer.
 **In der öffentlichen Dokumentation werden keine echten öffentlichen
 Adressen und keine DynDNS-Namen verwendet**, sondern Platzhalter.
  
-## Smartphones
- 
-**Die Smartphones der Benutzer (Android) haben eine aggressive
-Akku-Optimierung.** Diese kann den automatischen Upload von Fotos im Hintergrund
-stoppen. Für die Nextcloud-App muss die Akku-Optimierung deaktiviert werden, bei
-Xiaomi zusätzlich der Autostart erlaubt werden.
- 
-**Der automatische Upload funktioniert nur, wenn der Server läuft.** Ausserhalb
-der Betriebszeit sammeln die Smartphones die Fotos und laden sie beim nächsten
-Mal hoch.
- 
 ## Hinweise ohne Handlungsbedarf
  
 **Abgebrochene Proxmox-Befehle hinterlassen Reste.** Ein unterbrochenes

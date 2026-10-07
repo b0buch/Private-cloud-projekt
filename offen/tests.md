@@ -26,6 +26,11 @@ Stand: 06.10.2026
 - [x] **Neustart von WireGuard nach einem Neustart der VM.** Prüfen, dass
       `wg-quick@wg0` nach Docker startet und die Regeln in `DOCKER-USER`
       oben stehen.
+- [x] **Realistischer Test der Benachrichtigung.** Die Sicherung der Daten
+      ohne angeschlossene externe Festplatte starten. Erwartet: Abbruch an der
+      Prüfung mit `findmnt` und eine E-Mail.
+- [x] **Wiederherstellung einzelner Dateien aus der rsync-Sicherung.**
+
 ### Sicherungen
  
 - [x] **Backup der VM mit vzdump.**
@@ -77,6 +82,18 @@ Stand: 06.10.2026
 - [x] **Server-VPN erreicht Proxmox nicht.** Über den Tunnel des Laptops ist
       die Weboberfläche von Proxmox nicht erreichbar, wie gewollt.
       (06.10.2026)
+- [x] **Upload eines grossen Videos über VPN.** Datei mit 1.5 GB über
+      Mobilfunk und Server-VPN: 8 bis 10 Minuten, etwa 2.5 MB/s (20 Mbit/s).
+      Die Grenze ist der Upload des Mobilfunknetzes, nicht der Server.
+      Ein GoPro-Video mit 4 GB braucht damit rund 25 bis 30 Minuten,
+      grosse Dateien besser im WLAN zu Hause hochladen. (06.10.2026)
+- [X] **Vollständige Zugriffsmatrix des Server-VPN.** Über den Tunnel eines
+      Benutzers dürfen nicht erreichbar sein: SSH auf die VM
+      (`ssh <benutzer>@192.168.178.220`), Weboberfläche der FRITZ!Box,
+      andere Geräte im Heimnetz. (06.10.2026)
+- [x] ~~Automatischen Upload von Fotos testen~~ — entfällt. Die Funktion
+      wird bewusst nicht verwendet, Dateien werden von Hand hochgeladen.
+      (06.10.2026)
 ### Klärungen
  
 - [x] Ist die zusätzliche IPv4-Adresse bei InterXS monatlich kündbar und wie
@@ -88,17 +105,5 @@ Stand: 06.10.2026
       (entfällt)
 ## Offen
  
-- [ ] **Vollständige Zugriffsmatrix des Server-VPN.** Über den Tunnel eines
-      Benutzers dürfen nicht erreichbar sein: SSH auf die VM
-      (`ssh <benutzer>@192.168.178.220`), Weboberfläche der FRITZ!Box,
-      andere Geräte im Heimnetz.
 - [ ] **Alle Geräte der Benutzer verbinden** und jeweils mit ausgeschaltetem
       WLAN prüfen.
-- [ ] **Realistischer Test der Benachrichtigung.** Die Sicherung der Daten
-      ohne angeschlossene externe Festplatte starten. Erwartet: Abbruch an der
-      Prüfung mit `findmnt` und eine E-Mail.
-- [ ] **Wiederherstellung einzelner Dateien aus der rsync-Sicherung.**
-- [ ] **Automatischen Upload von Fotos** auf allen drei Smartphones testen,
-      besonders im Hintergrund über mehrere Stunden (Akku-Optimierung).
-- [ ] **Upload eines grossen Videos über VPN** (Zeit messen, der Anschluss hat
-      50 Mbit/s im Upload).

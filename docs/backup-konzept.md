@@ -162,10 +162,3 @@ der Festplatte wird die Sicherung deshalb von Hand gestartet:
 ```bash
 systemctl start nextcloud-data-backup.service
 ```
- 
-## Noch offen
- 
-- Kontrollieren, dass beide Skripte mit `set -euo pipefail` beginnen
-- Wiederherstellung einzelner Dateien aus der rsync-Sicherung testen
-- Realistischen Test der Benachrichtigung durchführen: Sicherung der Daten
-  ohne angeschlossene externe Festplatte starten

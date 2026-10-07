@@ -37,12 +37,10 @@ gemacht, Kosten entstehen keine.
 - [x] Name notieren: `<name>.myfritz.net` (in der Dokumentation Platzhalter)
 - [x] Feste IP-Adresse für den Server festlegen: `192.168.178.220`
 - [x] Aktuellen Adressbereich der FRITZ!Box notieren: `192.168.178.0/24`
-### A4. Smartphones vorbereiten (alle drei Geräte)
+### A4. Smartphones vorbereiten (alle sechs Geräte)
  
 - [ ] Nextcloud-App installieren
 - [ ] WireGuard-App installieren
-- [ ] Akku-Optimierung für die Nextcloud-App ausschalten
-      (Xiaomi: zusätzlich Autostart in den MIUI-Einstellungen erlauben)
 - [ ] Freien Speicherplatz auf den Geräten prüfen
 ### A5. Benutzerkonzept festlegen
  
@@ -146,7 +144,7 @@ verwendet. Die Benutzer erhalten Zugang über das Server-VPN (C5).
       **das ist der richtige Test**
 - [x] Über VPN die Nextcloud-Adresse im Browser öffnen
 - [x] Über VPN in der Nextcloud-App anmelden
-- [ ] Ein Foto hochladen und die Geschwindigkeit messen
+- [x] Ein Foto hochladen und die Geschwindigkeit messen
 - [ ] Verbindung für alle drei Benutzer einrichten und testen
       (zwei von drei erledigt am 06.10.2026)
 ### C4. Sicherheit
