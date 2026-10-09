@@ -1,6 +1,6 @@
 # Sicherheitskonzept
  
-Stand: 06.10.2026
+Stand: 08.10.2026
  
 Die Sicherheit beruht nicht auf einer einzelnen Massnahme, sondern auf mehreren
 unabhängigen Schichten. Fällt eine aus, schützen die übrigen weiter. Dieses
@@ -47,12 +47,22 @@ laufen durch FORWARD, und ufw sieht sie nicht.
  
 ### Ablauf einer Verbindung
  
-1. Der Browser öffnet eine Verbindung auf Port 443
-2. Der **Server** sendet sein Zertifikat
-3. Der **Browser** prüft: passt der Name, wer hat unterschrieben, ist es noch
+1. Der Browser öffnet eine Verbindung auf Port 443 und schickt gleich seinen
+   Teil des Schlüsselaustauschs mit
+2. Der Server antwortet mit seinem Teil, ab hier ist die Verbindung
+   verschlüsselt
+3. Der **Server** sendet sein Zertifikat und beweist mit einer Signatur,
+   dass er den passenden privaten Schlüssel besitzt
+4. Der **Browser** prüft: passt der Name, wer hat unterschrieben, ist es noch
    gültig
-4. Beide Seiten handeln die Schlüssel für die Verschlüsselung aus
-5. Erst danach werden die eigentlichen Daten übertragen
+5. Erst wenn die Prüfung bestanden ist, werden die eigentlichen Daten
+   übertragen
+
+So läuft es bei TLS 1.3, das Caddy und aktuelle Browser verwenden. Bei TLS 1.2
+kam das Zertifikat noch vor dem Schlüsselaustausch. An seiner Rolle ändert
+das nichts: Es bestätigt, mit wem der Schlüssel ausgehandelt wurde, und ohne
+bestandene Prüfung fliessen keine Daten.
+
 Das Zertifikat gehört also dem Server und wird vom Browser des Benutzers
 geprüft, nicht umgekehrt.
  
@@ -160,7 +170,9 @@ Passwörter wären kein zweiter Faktor.
 Verwendet wird TOTP (Time-based One-Time Password). Server und App auf dem
 Smartphone kennen ein gemeinsames Geheimnis und berechnen daraus unabhängig
 voneinander einen Code, der von der aktuellen Uhrzeit abhängt. Der Code
-wechselt alle 30 Sekunden und wird nie über das Netz übertragen.
+wechselt alle 30 Sekunden. Bei der Anmeldung wird nur dieser Code übertragen,
+der nach kurzer Zeit wertlos ist. Das gemeinsame Geheimnis selbst geht nur
+einmal beim Einrichten (QR-Code) über das Netz, danach nie mehr.
  
 ### Wiederherstellungscodes
  
@@ -177,7 +189,10 @@ occ twofactorauth:disable <benutzer>
 ## Brute-Force-Schutz
  
 Nextcloud sperrt ein Konto nach falschen Anmeldeversuchen **nicht**, sondern
-verzögert die Antworten zunehmend, bis zu 30 Sekunden.
+verzögert die Antworten zunehmend, bis zu 25 Sekunden. Nach zehn
+Fehlversuchen innerhalb von 30 Minuten antwortet Nextcloud zusätzlich mit
+`429 Too Many Requests`. Beides gilt für die Adresse des Angreifers, nicht für
+das Konto.
  
 Eine echte Sperrung könnte ein Angreifer missbrauchen, um fremde Konten
 absichtlich unbrauchbar zu machen. Ein Mensch, der sich zweimal vertippt, merkt

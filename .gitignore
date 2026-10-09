@@ -55,3 +55,8 @@ Desktop.ini
 #Screenshots 
 !docs/bilder/*.png
 !docs/bilder/*.jpg
+
+# WireGuard und Mailversand (enthalten private Schluessel bzw. Passwoerter)
+*.conf
+msmtprc
+.msmtprc

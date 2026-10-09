@@ -39,9 +39,9 @@ gemacht, Kosten entstehen keine.
 - [x] Aktuellen Adressbereich der FRITZ!Box notieren: `192.168.178.0/24`
 ### A4. Smartphones vorbereiten (alle sechs Geräte)
  
-- [ ] Nextcloud-App installieren
-- [ ] WireGuard-App installieren
-- [ ] Freien Speicherplatz auf den Geräten prüfen
+- [x] Nextcloud-App installieren
+- [x] WireGuard-App installieren
+- [x] Freien Speicherplatz auf den Geräten prüfen
 ### A5. Benutzerkonzept festlegen
  
 - [x] Benutzer festgelegt (05.10.2026, Namen nicht in der Dokumentation)
@@ -145,8 +145,7 @@ verwendet. Die Benutzer erhalten Zugang über das Server-VPN (C5).
 - [x] Über VPN die Nextcloud-Adresse im Browser öffnen
 - [x] Über VPN in der Nextcloud-App anmelden
 - [x] Ein Foto hochladen und die Geschwindigkeit messen
-- [ ] Verbindung für alle drei Benutzer einrichten und testen
-      (zwei von drei erledigt am 06.10.2026)
+- [x] Verbindung für alle drei Benutzer einrichten und testen (06.10.2026)
 ### C4. Sicherheit
  
 - [x] Zwei-Faktor-Authentisierung für die Gruppe `admin` verpflichtend
@@ -163,7 +162,7 @@ verwendet. Die Benutzer erhalten Zugang über das Server-VPN (C5).
 - [x] dnsmasq für die Namen im Tunnel
 - [x] Zertifikat um die IP-Adresse ergänzt
 - [x] Sechs Teilnehmer vorbereitet (drei Smartphones, drei Laptops)
-- [ ] Alle Geräte verbunden und die Schlüsseldateien danach gelöscht
+- [x] Alle Geräte verbunden und die Schlüsseldateien danach gelöscht
 ---
  
 ## Was beim Umzug tatsaechlich schiefging

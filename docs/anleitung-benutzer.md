@@ -15,7 +15,7 @@ normale Webseite.
 ## Was du bekommst
  
 - ein eigenes Konto mit **100 GB** Speicher für deine persönlichen Dateien
-- Zugriff auf die gemeinsamen Ordner **Foto-Video** oder **Ski**
+- Zugriff auf die gemeinsamen Ordner **Foto-Video** und **Ski**
 - Zugriff von zu Hause und von unterwegs
 ## Was du vom Administrator bekommst
  
@@ -35,9 +35,10 @@ ein zweites Gerät kopieren.
 1. Öffne die E-Mail mit der Einladung von Nextcloud.
    **Findest du sie nicht, schau im Spam-Ordner nach.**
 2. Klicke auf den Link und lege ein Passwort fest.
-   - mindestens 8 Zeichen
+   - mindestens 8 Zeichen (kürzere lehnt Nextcloud ab)
    - nirgends sonst verwendet
 3. Das Passwort kennst nur du. Der Administrator kann es nicht sehen.
+
 Der Link funktioniert nur mit aktivem VPN. Mach also zuerst Schritt 2 und
 öffne den Link danach.
  
@@ -99,6 +100,7 @@ du wirklich mit unserem Server sprichst.
 1. Doppelklick auf `server.crt`, die Schlüsselbundverwaltung öffnet sich.
 2. Das Zertifikat doppelt anklicken → **Vertrauen** →
    "Bei Verwendung dieses Zertifikats": **Immer vertrauen**.
+
 **Firefox** hat einen eigenen Speicher: Einstellungen → Datenschutz &
 Sicherheit → Zertifikate anzeigen → Zertifizierungsstellen → **Importieren**.
  
@@ -134,10 +136,22 @@ wie oben. Für gelegentliches Hoch- und Herunterladen reicht der Browser.
  
 - **Zum Benutzen der Cloud:** VPN einschalten.
 - **Wenn du die Cloud nicht brauchst:** VPN ausschalten.
+
 **Wichtig:** Der Server läuft nicht immer. Ist er ausgeschaltet und dein VPN
 eingeschaltet, öffnen sich auf deinem Gerät **auch andere Webseiten nicht**.
 In diesem Fall einfach das VPN ausschalten, dann geht alles wieder.
- 
+
+### Wo lege ich meine Dateien ab?
+
+| Ordner                | Wer sieht ihn | Gesichert?          |
+| ---                   | ---           | ---                 |
+| **Foto-Video**        | alle Benutzer | **ja**, wöchentlich |
+| **Ski**               | alle Benutzer | nein                |
+| Deine eigenen Dateien | nur du        | **nein**            |
+
+**Nur der Ordner Foto-Video wird gesichert.** Fällt die Festplatte aus, sind
+alle anderen Dateien verloren. Was dir wichtig ist, gehört in **Foto-Video**.
+
 ### Grosse Videos
  
 Über das Mobilfunknetz dauert eine Datei mit 1.5 GB etwa 10 Minuten, ein

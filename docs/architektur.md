@@ -1,6 +1,6 @@
 # Architektur
  
-Stand: 06.10.2026
+Stand: 08.10.2026
  
 ## Übersicht
  
@@ -365,8 +365,8 @@ Namen funktioniert unabhängig davon.
 | `overwrite.cli.url` | `https://privatecloud.fritz.box`      | Basisadresse für Hintergrundaufgaben und Selbstprüfungen       |
 | `trusted_domains`   | Name und Adressbereiche mit `*`       | Erlaubte Adressen für den Zugriff                              |
  
-In `trusted_domains` stehen noch zwei Einträge aus dem Netz des Arbeitsplatzes
-(`192.168.137.*`). Sie sind wirkungslos und werden entfernt.
+Die beiden Einträge aus dem Netz des Arbeitsplatzes (`192.168.137.*`) wurden
+nach dem Umzug aus `trusted_domains` entfernt.
  
 ## Geplante Aufgaben
  

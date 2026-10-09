@@ -1,6 +1,6 @@
 # Tests
  
-Stand: 06.10.2026
+Stand: 08.10.2026
  
 ## Erledigt
  
@@ -23,13 +23,6 @@ Stand: 06.10.2026
 - [x] **Selbstprüfungen nach dem Umzug.** Alle sechs netzwerkbezogenen
       Prüfungen sind verschwunden, nachdem der DNS-Server der VM von 1.1.1.1
       auf die FRITZ!Box umgestellt wurde. (05.10.2026)
-- [x] **Neustart von WireGuard nach einem Neustart der VM.** Prüfen, dass
-      `wg-quick@wg0` nach Docker startet und die Regeln in `DOCKER-USER`
-      oben stehen.
-- [x] **Realistischer Test der Benachrichtigung.** Die Sicherung der Daten
-      ohne angeschlossene externe Festplatte starten. Erwartet: Abbruch an der
-      Prüfung mit `findmnt` und eine E-Mail.
-- [x] **Wiederherstellung einzelner Dateien aus der rsync-Sicherung.**
 
 ### Sicherungen
  
@@ -54,6 +47,13 @@ Stand: 06.10.2026
 - [x] **E-Mail bei einem fehlgeschlagenen Dienst.** Mit
       `systemd-run --unit=test-fehler -p OnFailure=... /bin/false` einen
       Fehler erzeugt. Die E-Mail mit Status und Protokoll kam an. (06.10.2026)
+- [x] **Realistischer Test der Benachrichtigung.** Sicherung der Daten ohne
+      angeschlossene externe Festplatte gestartet. Das Skript brach an der
+      Prüfung mit `findmnt` ab, die E-Mail kam nach etwa einer Sekunde an.
+      (07.10.2026)
+- [x] **Wiederherstellung aus der rsync-Sicherung.** Ordner Foto-Video nach
+      `/tmp/restore-test` zurückgeholt, `diff -rq` mit dem Original ohne
+      Unterschiede. (07.10.2026)
 - [x] **Hintergrundaufgaben über den systemd-Timer.** `occ setupchecks`
       meldet "Last background job execution ran seconds ago". (06.10.2026)
 ### Sicherheit und Anmeldung
@@ -79,6 +79,10 @@ Stand: 06.10.2026
 - [x] **Namen im Server-VPN.** Nach der Einrichtung von dnsmasq ist
       `https://privatecloud.fritz.box` auch über das Server-VPN erreichbar.
       Kontrolle mit `nslookup`: Antwort von `10.9.0.1`. (06.10.2026)
+- [x] **Neustart von WireGuard nach einem Neustart der VM.** `wg-quick@wg0`
+      startet nach Docker, die Regeln in `DOCKER-USER` stehen oben.
+- [x] **Alle Geräte der Benutzer verbunden** (drei Smartphones, drei Laptops)
+      und jeweils mit ausgeschaltetem WLAN geprüft. (06.10.2026)
 - [x] **Server-VPN erreicht Proxmox nicht.** Über den Tunnel des Laptops ist
       die Weboberfläche von Proxmox nicht erreichbar, wie gewollt.
       (06.10.2026)
@@ -104,6 +108,5 @@ Stand: 06.10.2026
 - [x] Ändert die zusätzliche IPv4-Adresse etwas an der Telefonie im Haushalt?
       (entfällt)
 ## Offen
- 
-- [ ] **Alle Geräte der Benutzer verbinden** und jeweils mit ausgeschaltetem
-      WLAN prüfen.
+
+Keine. Alle geplanten Tests sind abgeschlossen.

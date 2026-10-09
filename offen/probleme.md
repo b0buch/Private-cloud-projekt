@@ -1,6 +1,6 @@
 # Probleme
  
-Stand: 06.10.2026
+Stand: 08.10.2026
  
 Offene Punkte oben, gelöste in der Tabelle am Ende.
  
@@ -22,10 +22,6 @@ Vorerst ein Hinweis in der Anleitung für die Benutzer. Dauerhafte Lösung wäre
 eine eigene Domain mit einem öffentlichen DNS-Eintrag (siehe
 `sicherheit.md`).
  
-**Alte Einträge in `trusted_domains`.** `192.168.137.220` und `192.168.137.*`
-stammen aus dem Netz des Arbeitsplatzes. Wirkungslos, aber die Konfiguration
-soll den tatsächlichen Zustand zeigen. Zu entfernen.
- 
 ## Nextcloud
  
 **Reste der internen Zertifizierungsstelle von Caddy.** Unter
@@ -34,10 +30,6 @@ Dateien vom Versuch am 30.09.2026. Sie werden nicht verwendet und können
 entfernt werden.
  
 ## Speicher und Backup
- 
-**Die Wiederherstellung aus der rsync-Sicherung ist nicht getestet.** VM und
-Datenbank wurden zurückgespielt, die Daten auf der externen Festplatte noch
-nicht. Geht nur zu Hause, weil die Festplatte getrennt aufbewahrt wird.
  
 **Eine fehlgeschlagene Sicherung der Daten wird nicht wiederholt.** Ist die
 externe Festplatte zur geplanten Zeit nicht angeschlossen, bricht das Skript
@@ -106,4 +98,6 @@ keinen Einfluss auf die Funktion.
 | Dumps der Datenbank für alle Benutzer lesbar         | 06.10.2026, `chmod 600` und `UMask=0077`              |
 | Fehler einer Sicherung fiel niemandem auf            | 06.10.2026, E-Mail über `OnFailure=`                  |
 | `apt-get update` auf Proxmox schlug fehl             | 06.10.2026, Paketquelle `no-subscription`             |
+| Alte Einträge `192.168.137.*` in `trusted_domains`   | nach dem Umzug entfernt                               |
+| Wiederherstellung aus der rsync-Sicherung ungetestet | 07.10.2026, Ordner Foto-Video, `diff -rq` identisch   |
  

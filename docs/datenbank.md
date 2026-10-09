@@ -29,7 +29,7 @@ normalen SELECT-Abfragen auslesen.
 ## Wichtige Tabellen
 
 |      Tabelle       |                       Inhalt                      |
-|        ---         |       ---              ---              ---       |
+|        ---         |                        ---                        |
 | `oc_users`         | Benutzerkonten                                    |
 | `oc_groups`        | Gruppen                                           |
 | `oc_group_user`    | Verknüpfung Benutzer ↔ Gruppe (n:m)               |
@@ -142,12 +142,12 @@ ORDER BY gesamtgroesse DESC;
 Ergebnis bei der leeren Installation (29.09.2026, nur Beispieldateien):
 
 |                      mimetype                   | anzahl | gesamtgroesse |
-|       ---              ---             ---      |  ---   |      ---      |
+|                       ---                       |  ---   |      ---      |
 | httpd/unix-directory                            |   17   | 161 536 062   |
+| application/pdf                                 |   3    | 32 472 900    |
 | application/vnd.oasis.opendocument.presentation |   11   | 16 105 234    |
 | application/vnd.oasis.opendocument.text         |   11   | 6 570 308     |
 | image/jpeg                                      |   8    | 5 656 313     |
-| application/pdf                                 |   3    | 32 472 900    |
 | video/mp4                                       |   1    | 3 963 036     |
 
 Diese Abfrage wird nach dem Hochladen der eigenen Fotos und Videos wiederholt,
@@ -249,10 +249,8 @@ binaere Protokoll ist also aktiv. Die Pruefung schliesst daraus auf eine
 eingerichtete Replikation, findet `Slave_running = OFF` und meldet einen
 Ausfall.
 
-Es gibt aber keine Replik und es ist keine geplant. Das binaere Protokoll
-dient hier einem anderen Zweck: Zusammen mit dem naechtlichen Dump erlaubt es
-eine Wiederherstellung auf einen beliebigen Zeitpunkt, nicht nur auf den
-Stand des Dumps.
-
-Die Pruefung hat also kein Problem gefunden, sondern die Konfiguration falsch
-gedeutet. Richtiges Vorgehen: nichts aendern und den Grund festhalten.
+Es gibt aber keine Replik und es ist keine geplant. Zusammen mit dem
+naechtlichen Dump wuerde das binaere Protokoll grundsaetzlich eine
+Wiederherstellung auf einen beliebigen Zeitpunkt erlauben. Getestet ist das
+nicht: Dafuer muesste bekannt sein, an welcher Stelle im Protokoll der Dump
+entstanden ist (Option `--master-data=2` beim Dump).

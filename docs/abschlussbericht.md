@@ -1,8 +1,8 @@
 # Abschlussbericht: Ferienprojekt Private Cloud
  
 **Lehrjahr:** 1. Lehrjahr Applikationsentwicklung
-**Zeitraum:** 18.09.2026 bis 06.10.2026
-**Stand:** 06.10.2026
+**Zeitraum:** 18.09.2026 bis 07.10.2026
+**Stand:** 08.10.2026
  
 ---
  
@@ -34,7 +34,7 @@ Laptops darauf zu, von zu Hause und von unterwegs, ausschliesslich über VPN.
 | Datenbank einrichten                      | MariaDB, mit SQL untersucht und nach Empfehlungen angepasst                                            |
 | Speicher für Fotos und Videos             | 4TB-Festplatte, qcow2 auf LVM, im laufenden Betrieb erweiterbar                                        |
 | Benutzer und Berechtigungen               | drei Benutzer, Gruppen, zwei gemeinsame Ordner mit Quota, getrenntes Administratorkonto                |
-| Backup einrichten                         | VM, Datenbank und Daten, automatisch, mit Nachholen und E-Mail bei Fehlern, Wiederherstellung getestet |
+| Backup einrichten                         | VM, Datenbank und Daten, automatisch, mit Nachholen und E-Mail bei Fehlern; Wiederherstellung von VM, Datenbank und Dateien getestet |
 | Zugriff mit dem Smartphone                | erledigt, per Browser und App                                                                          |
 | Fernzugriff über VPN                      | zwei VPN: eines für die Verwaltung, eines für die Benutzer mit Zugriff nur auf Nextcloud               |
 | Sicherheit überprüfen                     | HTTPS, Zwei-Faktor-Authentisierung, Brute-Force-Schutz, Firewall, Sicherheitskonzept                   |
@@ -78,6 +78,7 @@ Einzelheiten in `architektur.md`, `vpn.md`, `backup-konzept.md` und
 | 04.10.2026 | VPN auf der FRITZ!Box, Test von aussen (Sonntag, freiwillig)     |
 | 05.10.2026 | DNS, Datenbank, E-Mail, endgültige Benutzer, Dokumentation       |
 | 06.10.2026 | Zweites VPN, systemd-Timer, Benachrichtigung, Dokumentation      |
+| 07.10.2026 | Tests der Sicherung und Wiederherstellung, Präsentation          |
  
 Bis zum 02.10.2026 stand der Server am Arbeitsplatz und war über die
 Internetfreigabe eines Laptops angebunden. Diese Zwischenlösung war die

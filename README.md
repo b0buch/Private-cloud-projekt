@@ -30,6 +30,8 @@ jeder mit einem eigenen Konto und eigenem Speicherbereich.
 |       Ordner / Datei         |                      Inhalt                       |
 |            ---               |                       ---                         |
 | `journal/`                   | Arbeitsjournal, eine Datei pro Arbeitstag         |
+| `docs/abschlussbericht.md`   | Soll-Ist-Vergleich, Reflexion und Fazit           |
+| `docs/anleitung-benutzer.md` | Anleitung für die Benutzer (VPN, Zertifikat, App) |
 | `docs/architektur.md`        | Aufbau des Systems und Rolle der Festplatten      |
 | `docs/backup-konzept.md`     | Sicherungsstrategie und Begründung                |
 | `docs/datenbank.md`          | SQL-Abfragen und Erkenntnisse zur Datenbank       |
@@ -37,17 +39,18 @@ jeder mit einem eigenen Konto und eigenem Speicherbereich.
 | `docs/sicherheit.md`         | Sicherheitskonzept und verbleibende Risiken       |
 | `docs/vpn.md`                | Fernzugriff: Router-VPN und Server-VPN            |
 | `docs/umzug-checkliste.md`   | Checkliste für den Umzug des Servers nach Hause   |
+| `docs/PrivateCloud-Projektplan.pdf` | Ursprünglicher Projektplan                 |
 | `offen/loesungen.md`         | Lösungsideen für später                           |
 | `offen/probleme.md`          | Offene und gelöste Probleme                       |
 | `offen/tests.md`             | Geplante und erledigte Tests                      |
 | `docker-compose.yml`         | Definition der vier Container                     |
-| `nextcloud-image/Dockerfile` | Eigenes Image mit ffmpeg                          |
+| `nextcloud-image/Dockerfile.example` | Eigenes Image mit ffmpeg                  |
 | `caddy/Caddyfile.example`    | Konfiguration des Reverse Proxy                   |
 | `.env.example`               | Vorlage für die Passwortdatei                     |
  
 ## Stand des Projekts
  
-Stand: 06.10.2026
+Stand: 08.10.2026
  
 |                   Bereich                  |                         Stand                            |
 |                     ---                    |                          ---                             |
@@ -71,6 +74,8 @@ Stand: 06.10.2026
 | Backup der Datenbank (mysqldump)           | fertig, systemd-Timer holt verpasste Sicherungen nach    |
 | Backup der Daten (rsync)                   | fertig, systemd-Timer holt verpasste Sicherungen nach    |
 | Benachrichtigung bei Fehlern               | fertig (06.10.2026), E-Mail über `OnFailure=`            |
+| Wiederherstellung einzelner Dateien        | getestet (07.10.2026)                                    |
+| Anleitung für Benutzer, Abschlussbericht   | fertig                                                   |
  
 ---
  

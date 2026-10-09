@@ -1,6 +1,6 @@
 # Fernzugriff über VPN
  
-Stand: 06.10.2026
+Stand: 08.10.2026
  
 ## Grundsatz
  
@@ -39,7 +39,7 @@ Router meldet seine aktuelle Adresse an den Namensdienst von AVM.
  
 ## Vergleich der Varianten
  
-|                           | WireGuard auf der FRITZ!Box | WireGuard auf dem Server | WireGuard über IPv6 |       Tailscale       |
+|                           | WireGuard auf der FRITZ!Box | WireGuard auf dem Server | WireGuard über IPv6 | Tailscale (laut Doku) |
 |          ---              |            ---              |           ---            |        ---          |         ---           |
 | Kosten                    | keine                       | keine                    | keine               | gratis bis 100 Geräte |
 | Funktioniert hinter CGNAT | nein                        | nein                     | ja                  | ja                    |
@@ -409,10 +409,11 @@ für Webdienste über TCP gedacht. WireGuard braucht eine normale
 | Server-VPN: Laptop über Mobilfunk-Freigabe, per Adresse| 06.10.2026 | bestanden                       |
 | Server-VPN: Zugriff per Name über dnsmasq              | 06.10.2026 | bestanden                       |
 | Server-VPN: Proxmox über den Tunnel                    | 06.10.2026 | nicht erreichbar, wie gewollt   |
+| Server-VPN: SSH auf die VM, Weboberfläche der FRITZ!Box| 06.10.2026 | nicht erreichbar, wie gewollt   |
+| Server-VPN: Upload 1.5 GB über Mobilfunk               | 06.10.2026 | 8 bis 10 Minuten, ca. 2.5 MB/s  |
+| Server-VPN: alle Geräte der Benutzer verbunden         | 06.10.2026 | bestanden                       |
  
-Noch offen: vollständige Zugriffsmatrix des Server-VPN (SSH auf die VM und
-Weboberfläche des Router nicht erreichbar), Geschwindigkeit beim Hochladen
-eines grossen Videos über VPN.
+Beim Upload ist der Upload des Mobilfunknetzes die Grenze, nicht der Server.
  
 ## Verbleibende Risiken
  

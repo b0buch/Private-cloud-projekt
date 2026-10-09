@@ -1,6 +1,6 @@
 # Server und Anschluss
  
-Stand: 06.10.2026
+Stand: 08.10.2026
  
 ## Hardware
  
@@ -215,6 +215,8 @@ Neue Sicherungen sind nur für root lesbar (`UMask=0077` in den Diensten).
 | VM aus vzdump auf hdd4tb als VM 999          | 02.10.2026 | bestanden                                           |
 | Nachholen einer verpassten Sicherung         | 06.10.2026 | bestanden, 12 Sekunden nach dem Start               |
 | E-Mail bei fehlgeschlagenem Dienst           | 06.10.2026 | bestanden                                           |
+| Datensicherung ohne externe Festplatte       | 07.10.2026 | Abbruch erkannt, E-Mail nach etwa einer Sekunde     |
+| Ordner Foto-Video aus der rsync-Sicherung    | 07.10.2026 | bestanden, `diff -rq` ohne Unterschiede             |
  
 ## Gemessene Grösse der VM-Sicherung
  

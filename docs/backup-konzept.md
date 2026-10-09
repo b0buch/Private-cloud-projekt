@@ -1,6 +1,6 @@
 # Backup-Konzept
  
-Stand: 06.10.2026
+Stand: 08.10.2026
  
 ## Konzept
  
@@ -106,7 +106,7 @@ systemd bei einem fehlgeschlagenen Sicherungsdienst eine E-Mail
 (`OnFailure=`, Einzelheiten in `server.md`).
  
 Voraussetzung: Die Skripte müssen bei einem Fehler auch wirklich mit einem
-Fehlercode enden. Deshalb müssen beide mit `set -euo pipefail` beginnen. Ohne
+Fehlercode enden. Deshalb beginnen beide mit `set -euo pipefail` (kontrolliert am 07.10.2026). Ohne
 `pipefail` würde in der Kette `mysqldump | gzip` nur der Rückgabewert von
 `gzip` zählen, und ein abgebrochener Dump bliebe unbemerkt.
  
@@ -162,3 +162,14 @@ der Festplatte wird die Sicherung deshalb von Hand gestartet:
 ```bash
 systemctl start nextcloud-data-backup.service
 ```
+
+## Nachgewiesen
+
+| Test                                              | Datum      | Ergebnis                                   |
+| ---                                               | ---        | ---                                        |
+| Wiederherstellung der VM als VM 999               | 29.09.2026 | bestanden, wiederholt am 02.10.2026        |
+| Wiederherstellung der Datenbank                   | 29.09.2026 | bestanden                                  |
+| Erste automatische Sicherung von VM und Datenbank | 06.10.2026 | bestanden                                  |
+| Nachholen einer verpassten Sicherung              | 06.10.2026 | bestanden                                  |
+| Sicherung ohne angeschlossene externe Festplatte  | 07.10.2026 | Abbruch erkannt, E-Mail angekommen         |
+| Wiederherstellung aus der rsync-Sicherung         | 07.10.2026 | bestanden, `diff -rq` ohne Unterschiede    |
