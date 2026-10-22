@@ -146,6 +146,7 @@ drei Vorteile für die Sicherheit:
 - Nextcloud veröffentlicht keinen eigenen Port mehr und ist nur noch über den
   Proxy erreichbar
 - Die Sicherheitsheader gelten automatisch für alle künftigen Dienste
+
 |             Header                |                        Wirkung                              |
 |              ---                  |                          ---                                |
 | `Strict-Transport-Security`       | Der Browser verwendet künftig nur noch HTTPS                |
